@@ -1,0 +1,10 @@
+{
+  "name": "carnet-de-vie",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Carnet de vie personnel et professionnel",
+  "dependencies": {
+    "@netlify/database": "latest"
+  }
+}
