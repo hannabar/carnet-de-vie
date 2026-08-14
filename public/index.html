@@ -614,7 +614,12 @@ const DEFAULT_GOALS = [
   {id:"g4", name:"Me sentir bien", progress:0, note:""}
 ];
 
-function todayKey(d=new Date()){ return d.toISOString().slice(0,10); }
+function todayKey(d=new Date()){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 function isoWeekKey(d=new Date()){
   const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const dayNum = (dt.getUTCDay()+6)%7;
@@ -623,7 +628,11 @@ function isoWeekKey(d=new Date()){
   const week = 1 + Math.round(((dt-firstThursday)/86400000 - 3 + ((firstThursday.getUTCDay()+6)%7))/7);
   return dt.getUTCFullYear()+"-W"+String(week).padStart(2,"0");
 }
-function monthKey(d=new Date()){ return d.toISOString().slice(0,7); }
+function monthKey(d=new Date()){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  return `${y}-${m}`;
+}
 function fmtDateFull(d){ return d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'}); }
 function uid(){ return Math.random().toString(36).slice(2,9); }
 function parseAmount(str){
