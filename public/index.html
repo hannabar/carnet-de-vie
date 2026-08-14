@@ -51,7 +51,9 @@ body{
 h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
 .mono{ font-family: 'IBM Plex Mono', monospace; }
 
-#app{ max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; }
+html, body{ max-width:100%; overflow-x:hidden; }
+*{ min-width:0; }
+#app{ max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; overflow-x:hidden; }
 
 /* HEADER */
 .header{ text-align:center; margin-bottom: 8px; position:relative; }
@@ -98,9 +100,28 @@ h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
 .badge{ font-size:10.5px; padding:2px 8px; border-radius:999px; font-weight:600; flex:none; }
 
 /* ADD ROW */
-.add-row{ display:flex; gap:8px; margin-top:10px; }
-.add-row input, .add-row select{ font-size:13px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font-family:'Inter',sans-serif; background:#fff; }
-.add-row input[type=text]{ flex:1; }
+.today-events-card{ background:linear-gradient(135deg, var(--amber-pale), var(--amber-soft)); border:1px solid var(--amber-soft); border-radius:var(--radius); padding:14px 16px; margin-bottom:16px; }
+.bilan-big{ font-family:'Fraunces',serif; font-size:40px; font-weight:600; color:var(--indigo-deep); line-height:1; margin-top:4px; }
+.bilan-sub{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
+.bilan-chart{ width:100%; overflow:hidden; }
+.bilan-chart svg{ width:100%; height:auto; display:block; }
+.bilan-rank-row{ display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
+.bilan-rank-row:last-child{ border-bottom:none; }
+.bilan-rank-name{ flex:none; width:44%; font-size:13px; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bilan-rank-bar-bg{ flex:1; height:9px; background:var(--amber-pale); border-radius:999px; overflow:hidden; }
+.bilan-rank-bar{ height:100%; border-radius:999px; background:var(--sage); }
+.bilan-rank-pct{ flex:none; width:38px; text-align:right; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); }
+.bilan-progress-wrap{ margin-top:12px; }
+.bilan-stat-row{ display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; }
+.bilan-stat-row:last-child{ border-bottom:none; }
+.bilan-stat-val{ font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--indigo-deep); }
+.today-events-title{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#8A5F17; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.today-events-title svg{ color:var(--amber); }
+.today-event-row{ display:flex; align-items:center; gap:9px; padding:4px 0; font-size:14.5px; color:var(--ink); }
+.today-event-dot{ width:6px; height:6px; border-radius:50%; background:var(--amber); flex:none; }
+.add-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.add-row input, .add-row select{ font-size:13px; padding:7px 10px; border:1px solid var(--line); border-radius:8px; font-family:'Inter',sans-serif; background:#fff; box-sizing:border-box; max-width:100%; }
+.add-row input[type=text]{ flex:1; min-width:0; }
 .btn{ font-family:'Inter',sans-serif; font-size:13px; font-weight:600; padding:7px 14px; border-radius:8px; border:1px solid var(--indigo-deep); background: var(--indigo-deep); color:#F7EFDB; cursor:pointer; }
 .btn:hover{ opacity:.9; }
 .btn-ghost{ background:transparent; color: var(--indigo-deep); border:1px solid var(--line); }
@@ -139,7 +160,8 @@ h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
 .panel .btn{ background: var(--amber); border-color: var(--amber); color: var(--indigo-deep); }
 
 /* FINANCE */
-.fin-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+.fin-grid{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:12px; }
+.fin-field input{ width:100%; box-sizing:border-box; }
 .fin-field{ display:flex; flex-direction:column; gap:4px; }
 .fin-field label{ font-size:11.5px; color: var(--ink-soft); font-weight:600; }
 .fin-field input{ font-size:16px; padding:8px 10px; border:1px solid var(--line); border-radius:9px; font-family:'IBM Plex Mono',monospace; background:#fff; }
@@ -317,13 +339,16 @@ h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
     <button class="nav-card" data-tab="private"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20"/></svg></span><span class="nav-label">Cours part.</span></button>
     <button class="nav-card" data-tab="commercial"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17.5 8.6 19a1.6 1.6 0 0 1-2.3-2.1l-2-2.2a1.7 1.7 0 0 1 .2-2.4L8 8.5h4l2-1.5 6 1v7l-2 1-3.5-2.5"/><path d="M13.5 16.5 11 14"/></svg></span><span class="nav-label">Commercial</span></button>
     <button class="nav-card" data-tab="etudes"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11.5V17c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6v-5.5"/></svg></span><span class="nav-label">Études</span></button>
+    <button class="nav-card" data-tab="bilan"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></span><span class="nav-label">Bilan</span></button>
   </div>
 
   <!-- TODAY -->
   <div class="view active" id="view-today">
+    <div id="today-events"></div>
     <div class="card">
       <div class="card-title">
-        <span>Cure en cours</span>
+        <span>Cures en cours</span>
+        <button class="card-add" id="add-cure-btn" aria-label="Ajouter une cure">+</button>
       </div>
       <div id="cure-box"></div>
     </div>
@@ -397,18 +422,9 @@ h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
       <div class="card-title"><span>Contacts &amp; prospects</span></div>
       <div id="commercial-list"></div>
       <div class="form-grid">
-        <input type="text" id="com-nom" placeholder="Nom / entreprise">
-        <select id="com-contact">
-          <option value="a_contacter">À contacter</option>
-          <option value="email">Contacté par email</option>
-          <option value="tel">Contacté par téléphone</option>
-        </select>
+        <input type="text" id="com-nom" placeholder="Nom / entreprise" style="flex:1 1 100%;">
       </div>
-      <div class="form-grid">
-        <label class="checkbox-label"><input type="checkbox" id="com-rdv"> RDV obtenu</label>
-        <input type="text" id="com-relance" placeholder="Prochaine relance (jj/mm ou note libre)">
-      </div>
-      <div class="add-row" style="margin-top:8px;"><button class="btn btn-small" id="com-add-btn">Ajouter</button></div>
+      <div class="add-row" style="margin-top:8px;"><button class="btn btn-small" id="com-add-btn">+ Ajouter un contact</button></div>
     </div>
   </div>
 
@@ -436,6 +452,35 @@ h1,h2,h3,.serif{ font-family: 'Fraunces', serif; }
         <input type="date" id="dev-echeance">
       </div>
       <div class="add-row" style="margin-top:8px;"><button class="btn btn-small" id="dev-add-btn">Ajouter</button></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-bilan">
+    <div class="card">
+      <div class="card-title"><span>Habitudes · 30 derniers jours</span></div>
+      <div class="bilan-big" id="bilan-habits-avg">—</div>
+      <div class="bilan-sub">taux de réussite moyen</div>
+      <div id="bilan-habits-chart" class="bilan-chart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Habitudes les mieux tenues (ce mois)</span></div>
+      <div id="bilan-habits-rank"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Finances · épargne par mois</span></div>
+      <div id="bilan-finance-chart" class="bilan-chart"></div>
+      <div class="bilan-progress-wrap">
+        <div class="progress-outer"><div class="progress-inner" id="bilan-fin-bar" style="width:0%"></div></div>
+        <div class="progress-label"><span id="bilan-fin-amount">0 €</span><span id="bilan-fin-pct">0%</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Enseignement</span></div>
+      <div id="bilan-teaching"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>Objectifs de l'année</span></div>
+      <div id="bilan-goals"></div>
     </div>
   </div>
 
@@ -512,7 +557,9 @@ const ICON = {
   ext:     SVG('<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>', 11, 2.2),
   key:     SVG('<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>', 19, 1.8),
   lock:    SVG('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', 19, 1.8),
-  checkPad:SVG('<polyline points="20 6 9 17 4 12"/>', 22, 2.6)
+  checkPad:SVG('<polyline points="20 6 9 17 4 12"/>', 22, 2.6),
+  star:    SVG('<polygon points="12 2 15.1 8.6 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.6"/>', 14, 1.8),
+  plus:    SVG('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>', 15, 2.4)
 };
 
 const CATS = {
@@ -727,7 +774,24 @@ function localEpilRef(){
   return window.__epilRef || todayKey();
 }
 
+async function renderTodayEvents(){
+  const el = document.getElementById('today-events');
+  if(!el) return;
+  const events = await sget('events:'+todayKey()) || [];
+  const dow = new Date().getDay();
+  const fixed = [];
+  if(dow===0) fixed.push('Talmud Torah · 10h–12h30', 'Faire le pain');
+  if(dow===6) fixed.push('Laver le linge');
+  const all = [...fixed.map(t=>({text:t, fixed:true})), ...events.map(e=>({text:e.text}))];
+  if(!all.length){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="today-events-card">
+    <div class="today-events-title">${ICON.star} Aujourd'hui</div>
+    ${all.map(e=>`<div class="today-event-row"><span class="today-event-dot"></span>${e.text}</div>`).join('')}
+  </div>`;
+}
+
 async function renderToday(){
+  renderTodayEvents();
   const epilRef = await sget('epilation-ref') || todayKey();
   window.__epilRef = epilRef;
 
@@ -829,15 +893,20 @@ async function renderToday(){
       const isDone = !!todayLog[cure.id];
       return `<div class="habit-row" style="border:none;">
         <div class="habit-check ${isDone?'done':''}" data-curecheck="${cure.id}">${isDone?ICON.check:''}</div>
-        <div><div class="habit-name ${isDone?'done':''}">${cure.name}</div>
+        <div style="flex:1"><div class="habit-name ${isDone?'done':''}">${cure.name}</div>
         <div class="habit-sub">${cure.sub?cure.sub+' · ':''}jour ${dayNum}${cure.duration?'/'+cure.duration:''} · fin prévue le ${end.toLocaleDateString('fr-FR')} · reste ${remaining} j</div></div>
+        <button class="habit-del" style="visibility:visible" data-curedel="${cure.id}">${ICON.close}</button>
       </div>`;
     }).join('');
     cures.forEach(cure=>{
-      const el = cureBox.querySelector(`[data-curecheck="${cure.id}"]`);
-      el.onclick = async ()=>{
+      cureBox.querySelector(`[data-curecheck="${cure.id}"]`).onclick = async ()=>{
         todayLog[cure.id] = !todayLog[cure.id];
         await sset('habitlog:'+todayKey(), todayLog);
+        renderToday();
+      };
+      cureBox.querySelector(`[data-curedel="${cure.id}"]`).onclick = async ()=>{
+        habits = habits.filter(h=>h.id!==cure.id);
+        await sset('habits-config', habits);
         renderToday();
       };
     });
@@ -865,6 +934,7 @@ function renderTasks(){
 }
 
 function bindStaticEvents(){
+  document.getElementById('add-cure-btn').onclick = openAddCureDrawer;
   document.getElementById('toggle-manage').onclick = ()=>{
     const p = document.getElementById('manage-panel');
     p.style.display = p.style.display==='none' ? 'block' : 'none';
@@ -914,6 +984,153 @@ function bindStaticEvents(){
   };
 }
 
+/* ===== BILAN / HISTORIQUE ===== */
+function dateMinusDays(n){ const d = new Date(); d.setDate(d.getDate()-n); return d; }
+
+function lineChartSVG(values, opts={}){
+  const w = 320, h = 90, pad = 6;
+  const n = values.length;
+  if(!n) return '';
+  const max = 100;
+  const stepX = (w - pad*2) / Math.max(1, n-1);
+  const pts = values.map((v,i)=>{
+    const x = pad + i*stepX;
+    const y = pad + (h - pad*2) * (1 - Math.max(0,Math.min(100,v))/max);
+    return [x,y];
+  });
+  const line = pts.map((p,i)=> (i===0?'M':'L') + p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area = `M ${pts[0][0].toFixed(1)} ${(h-pad).toFixed(1)} ` +
+    pts.map(p=>'L '+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ') +
+    ` L ${pts[n-1][0].toFixed(1)} ${(h-pad).toFixed(1)} Z`;
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img">
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h-pad}" stroke="var(--line)" stroke-width="1"/>
+    <line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}" stroke="var(--line)" stroke-width="1"/>
+    <path d="${area}" fill="var(--amber-pale)" opacity="0.7"/>
+    <path d="${line}" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.filter((_,i)=> n<=14 || i%Math.ceil(n/14)===0).map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2" fill="var(--indigo-deep)"/>`).join('')}
+  </svg>`;
+}
+
+function barChartSVG(items){
+  // items: [{label, value, color}]
+  const w = 320, h = 120, padB = 22, padT = 8, padX = 8;
+  if(!items.length) return '';
+  const max = Math.max(1, ...items.map(i=>i.value));
+  const bw = (w - padX*2) / items.length;
+  return `<svg viewBox="0 0 ${w} ${h}" role="img">
+    ${items.map((it,i)=>{
+      const bh = (h - padB - padT) * (it.value / max);
+      const x = padX + i*bw + bw*0.18;
+      const y = h - padB - bh;
+      const barW = bw*0.64;
+      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(0,bh).toFixed(1)}" rx="4" fill="${it.color||'var(--amber)'}"/>
+        <text x="${(x+barW/2).toFixed(1)}" y="${h-8}" text-anchor="middle" font-size="9" fill="var(--ink-soft)" font-family="Inter">${it.label}</text>`;
+    }).join('')}
+  </svg>`;
+}
+
+async function renderBilan(){
+  // ---- 1. Habitudes : taux de réussite sur 30 jours ----
+  const daily = [];
+  const applicableFor = (dow)=> habits.filter(h=>{
+    if(h.type==='cure' || h.type==='daily-text') return false;
+    if(h.type==='weekday') return h.day===dow;
+    if(h.type==='weekly') return false;
+    return h.type==='daily';
+  });
+  let sumPct = 0, counted = 0;
+  const perHabit = {}; // id -> {name, done, total}
+  for(let i=29;i>=0;i--){
+    const d = dateMinusDays(i);
+    const key = todayKey(d);
+    const log = await sget('habitlog:'+key) || {};
+    const list = applicableFor(d.getDay());
+    let done = 0;
+    list.forEach(h=>{
+      const ok = !!log[h.id];
+      if(ok) done++;
+      if(!perHabit[h.id]) perHabit[h.id] = { name:h.name, done:0, total:0 };
+      perHabit[h.id].total++;
+      if(ok) perHabit[h.id].done++;
+    });
+    const pct = list.length ? Math.round(done/list.length*100) : 0;
+    daily.push(pct);
+    if(list.length){ sumPct += pct; counted++; }
+  }
+  const avg = counted ? Math.round(sumPct/counted) : 0;
+  document.getElementById('bilan-habits-avg').textContent = avg + '%';
+  document.getElementById('bilan-habits-chart').innerHTML = lineChartSVG(daily);
+
+  // ---- 2. Classement des habitudes les mieux tenues ----
+  const ranked = Object.values(perHabit)
+    .filter(h=>h.total>0)
+    .map(h=>({ name:h.name, pct: Math.round(h.done/h.total*100) }))
+    .sort((a,b)=>b.pct-a.pct)
+    .slice(0,8);
+  const rankEl = document.getElementById('bilan-habits-rank');
+  rankEl.innerHTML = ranked.length ? ranked.map(h=>{
+    const col = h.pct>=70 ? 'var(--sage)' : h.pct>=40 ? 'var(--amber)' : 'var(--rose)';
+    return `<div class="bilan-rank-row">
+      <div class="bilan-rank-name">${h.name}</div>
+      <div class="bilan-rank-bar-bg"><div class="bilan-rank-bar" style="width:${h.pct}%; background:${col}"></div></div>
+      <div class="bilan-rank-pct">${h.pct}%</div>
+    </div>`;
+  }).join('') : '<div class="empty-state">Pas encore assez de données. Reviens dans quelques jours !</div>';
+
+  // ---- 3. Finances : épargne par mois (6 derniers) ----
+  const monthsBars = [];
+  let totalSaved = 0;
+  const monthNames = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+  // total épargne toutes périodes
+  const finKeys = lsListKeys('finance:');
+  for(const k of finKeys){
+    const v = await sget(k);
+    if(v && v.savings) totalSaved += v.savings.reduce((s,x)=>s+parseAmount(x.amount),0);
+  }
+  for(let i=5;i>=0;i--){
+    const d = new Date(); d.setMonth(d.getMonth()-i);
+    const mk = monthKey(d);
+    const v = await sget('finance:'+mk);
+    const saved = v && v.savings ? v.savings.reduce((s,x)=>s+parseAmount(x.amount),0) : 0;
+    monthsBars.push({ label: monthNames[d.getMonth()], value: saved, color:'var(--sage)' });
+  }
+  document.getElementById('bilan-finance-chart').innerHTML = barChartSVG(monthsBars);
+  const pct = Math.min(100, Math.round(totalSaved/10000*100));
+  document.getElementById('bilan-fin-bar').style.width = pct+'%';
+  document.getElementById('bilan-fin-amount').textContent = totalSaved.toLocaleString('fr-FR')+' € / 10 000 €';
+  document.getElementById('bilan-fin-pct').textContent = pct+'%';
+
+  // ---- 4. Enseignement : réalisés vs à rattraper ----
+  const teachKeys = lsListKeys('teaching:');
+  let realise=0, rattraper=0, prevu=0;
+  const todayStr = todayKey();
+  for(const k of teachKeys){
+    const entries = await sget(k) || [];
+    entries.forEach(e=>{
+      if(e.statut==='realise') realise++;
+      else if(e.statut==='a_rattraper') rattraper++;
+      else prevu++;
+    });
+  }
+  document.getElementById('bilan-teaching').innerHTML =
+    `<div class="bilan-stat-row"><span>Cours réalisés</span><span class="bilan-stat-val" style="color:var(--sage)">${realise}</span></div>
+     <div class="bilan-stat-row"><span>À rattraper</span><span class="bilan-stat-val" style="color:var(--rose)">${rattraper}</span></div>
+     <div class="bilan-stat-row"><span>Prévus</span><span class="bilan-stat-val">${prevu}</span></div>`;
+
+  // ---- 5. Objectifs ----
+  const goalsData = await sget('goals') || [];
+  const gEl = document.getElementById('bilan-goals');
+  gEl.innerHTML = goalsData.length ? goalsData.map(g=>{
+    const p = g.progress||0;
+    const col = p>=70 ? 'var(--sage)' : p>=40 ? 'var(--amber)' : 'var(--rose)';
+    return `<div class="bilan-rank-row">
+      <div class="bilan-rank-name">${g.name}</div>
+      <div class="bilan-rank-bar-bg"><div class="bilan-rank-bar" style="width:${p}%; background:${col}"></div></div>
+      <div class="bilan-rank-pct">${p}%</div>
+    </div>`;
+  }).join('') : '<div class="empty-state">Aucun objectif défini.</div>';
+}
+
 function bindTabs(){
   document.querySelectorAll('.nav-card').forEach(t=>{
     t.onclick = ()=>{
@@ -921,6 +1138,7 @@ function bindTabs(){
       document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
       t.classList.add('active');
       document.getElementById('view-'+t.dataset.tab).classList.add('active');
+      if(t.dataset.tab === 'bilan') renderBilan();
       if(typeof t.scrollIntoView === 'function'){ t.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
       window.scrollTo({top:0, behavior:'smooth'});
     };
@@ -1005,6 +1223,7 @@ async function openDayModal(key, dateObj){
     inp.value='';
     renderEventRows(events, key, dateObj);
     renderCalendar();
+    renderTodayEvents();
   };
   box.querySelector('#evt-input').addEventListener('keydown', e=>{ if(e.key==='Enter') box.querySelector('#evt-add').click(); });
 
@@ -1065,6 +1284,44 @@ function showDrawer(){
   const overlay = document.getElementById('day-modal-overlay');
   overlay.style.display = 'flex';
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ overlay.classList.add('open'); }); });
+}
+
+function openAddCureDrawer(){
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const today = todayKey();
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    <div class="modal-head">
+      <h3 class="modal-title">Nouvelle cure</h3>
+      <button class="modal-close" id="modal-close-btn">${ICON.close}</button>
+    </div>
+    <div class="form-grid">
+      <input type="text" id="cure-name" placeholder="Nom (ex: Traitement, complément...)" style="flex:1 1 100%;">
+    </div>
+    <div class="form-grid">
+      <label class="checkbox-label" style="flex:1 1 100%; color:var(--ink-soft);">Début</label>
+      <input type="date" id="cure-start" value="${today}" style="flex:1 1 100%;">
+    </div>
+    <div class="form-grid">
+      <label class="checkbox-label" style="flex:1 1 100%; color:var(--ink-soft);">Durée (en jours)</label>
+      <input type="text" inputmode="numeric" id="cure-duration" placeholder="ex: 90" style="flex:1 1 100%;">
+    </div>
+    <div class="add-row" style="margin-top:10px;"><button class="btn" id="cure-add" style="flex:1;">Ajouter la cure</button></div>`;
+  box.querySelector('#modal-close-btn').onclick = closeDayModal;
+  box.querySelector('#cure-add').onclick = async ()=>{
+    const name = box.querySelector('#cure-name').value.trim();
+    const start = box.querySelector('#cure-start').value;
+    const duration = parseInt(box.querySelector('#cure-duration').value, 10);
+    if(!name || !start || !duration || duration < 1) return;
+    habits.push({ id: uid(), name, cat:'sante', type:'cure', start, duration });
+    await sset('habits-config', habits);
+    closeDayModal();
+    renderToday();
+  };
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+  setTimeout(()=>box.querySelector('#cure-name').focus(), 320);
 }
 
 function openAddHabitDrawer(cat){
@@ -1487,9 +1744,10 @@ async function renderCommercial(){
     const step1 = contactStepInfo(c.contact);
     const step2 = { label: c.rdv ? 'RDV obtenu' : 'Pas de RDV', cls: c.rdv ? 'st-sage' : '' };
     const step3 = c.rdv ? resultatStepInfo(c.resultat) : { label:'—', cls:'st-off' };
+    const inp = (field, ph, val='') => `<input type="text" value="${String(val).replace(/"/g,'&quot;')}" data-cfield="${field}" data-id="${c.id}" placeholder="${ph}" style="flex:1 1 45%; min-width:0; border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-family:'Inter',sans-serif; font-size:12.5px; background:#fff;">`;
     return `<div class="entry-box">
       <div class="entry-top">
-        <input type="text" value="${c.nom.replace(/"/g,'&quot;')}" data-cfield="nom" data-id="${c.id}" style="flex:1; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font-family:'Fraunces',serif; font-weight:600; font-size:14.5px; color:var(--indigo-deep);">
+        <input type="text" value="${c.nom.replace(/"/g,'&quot;')}" data-cfield="nom" data-id="${c.id}" placeholder="Nom / entreprise" style="flex:1; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font-family:'Fraunces',serif; font-weight:600; font-size:14.5px; color:var(--indigo-deep);">
         <button class="habit-del" style="visibility:visible" data-cdel="${c.id}">${ICON.close}</button>
       </div>
       <div class="stepper">
@@ -1497,9 +1755,14 @@ async function renderCommercial(){
         <div class="step ${step2.cls}" data-cstep="rdv" data-id="${c.id}"><span class="step-num">2 · RDV</span>${step2.label}</div>
         <div class="step ${step3.cls}" data-cstep="resultat" data-id="${c.id}" ${!c.rdv?'style="pointer-events:none;"':''}><span class="step-num">3 · Résultat</span>${step3.label}</div>
       </div>
-      <div class="entry-fields" style="margin-top:6px;">
-        <input type="text" value="${(c.relance||'').replace(/"/g,'&quot;')}" data-cfield="relance" data-id="${c.id}" placeholder="prochaine relance" style="width:220px;">
+      <div class="entry-fields" style="margin-top:8px; gap:6px;">
+        ${inp('tel','Téléphone', c.tel)}
+        ${inp('email','Email', c.email)}
+        ${inp('montant','Montant potentiel (€)', c.montant)}
+        ${inp('rdvDate','Date de RDV', c.rdvDate)}
+        ${inp('relance','Prochaine relance', c.relance)}
       </div>
+      <textarea data-cfield="notes" data-id="${c.id}" placeholder="Notes libres..." style="width:100%; box-sizing:border-box; margin-top:6px; border:1px solid var(--line); border-radius:8px; padding:8px 9px; font-family:'Inter',sans-serif; font-size:13px; resize:vertical; min-height:44px; background:#fff;">${(c.notes||'').replace(/</g,'&lt;')}</textarea>
     </div>`;
   }).join('');
 
@@ -1631,13 +1894,13 @@ function bindProEvents(){
     if(!nom) return;
     commercialList.push({
       id: uid(), nom,
-      contact: document.getElementById('com-contact').value,
-      rdv: document.getElementById('com-rdv').checked,
+      contact: 'a_contacter',
+      rdv: false,
       resultat: 'en_attente',
-      relance: document.getElementById('com-relance').value.trim()
+      tel:'', email:'', montant:'', rdvDate:'', relance:'', notes:''
     });
     await sset('commercial', commercialList);
-    nomInp.value=''; document.getElementById('com-relance').value=''; document.getElementById('com-rdv').checked=false;
+    nomInp.value='';
     renderCommercial();
   };
 
