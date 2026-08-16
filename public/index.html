@@ -113,14 +113,14 @@ html, body{ max-width:100%; overflow-x:hidden; }
 .meal-cat-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
 .meal-cat-header-title{ display:flex; align-items:center; gap:8px; font-family:'Fraunces',serif; font-size:19px; font-weight:600; color:var(--indigo-deep); }
 .meal-cat-header-title svg{ color:var(--amber); }
-.meal-carousel{ display:flex; gap:12px; overflow-x:auto; padding:12px 2px 8px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.meal-carousel{ display:flex; gap:14px; overflow-x:auto; padding:12px 2px 8px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
 .meal-carousel::-webkit-scrollbar{ display:none; }
-.meal-carousel .meal-card{ flex:0 0 44%; max-width:175px; scroll-snap-align:start; }
-.meal-card{ background:var(--bg); border:1px solid var(--line); border-radius:16px; overflow:hidden; cursor:pointer; transition:transform .12s; -webkit-tap-highlight-color:transparent; box-shadow:0 2px 8px rgba(27,33,64,0.05); }
-.meal-card:active{ transform:scale(0.97); }
+.meal-carousel .meal-card{ flex:0 0 80%; max-width:320px; scroll-snap-align:center; }
+.meal-card{ background:var(--bg); border:1px solid var(--line); border-radius:18px; overflow:hidden; cursor:pointer; transition:transform .12s; -webkit-tap-highlight-color:transparent; box-shadow:0 3px 12px rgba(27,33,64,0.07); }
+.meal-card:active{ transform:scale(0.98); }
 .meal-photo{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; background:var(--amber-pale); }
 .meal-photo-empty{ width:100%; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; background:var(--amber-pale); color:var(--amber); }
-.meal-name{ padding:9px 11px 11px; font-family:'Fraunces',serif; font-size:14px; font-weight:600; color:var(--indigo-deep); line-height:1.3; }
+.meal-name{ padding:12px 15px 14px; font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--indigo-deep); line-height:1.3; }
 .recipe-hero{ width:calc(100% + 40px); margin:-10px -20px 0; max-height:240px; object-fit:cover; display:block; }
 .recipe-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-top:16px; }
 .recipe-title{ font-family:'Fraunces',serif; font-size:23px; font-weight:600; color:var(--indigo-deep); margin:0; line-height:1.2; }
