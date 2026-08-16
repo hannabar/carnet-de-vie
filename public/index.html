@@ -189,7 +189,14 @@ html, body{ max-width:100%; overflow-x:hidden; }
 .course-row{ display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); }
 .course-row:last-child{ border-bottom:none; }
 .course-row.done{ opacity:.55; }
+.course-row.urgent .task-text{ font-weight:600; color:var(--indigo-deep); }
+.course-cat-head{ display:flex; align-items:center; gap:8px; font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--indigo-deep); margin-bottom:8px; }
+.course-cat-head svg{ color:var(--amber); }
+.course-star{ background:none; border:none; color:var(--ink-faint); cursor:pointer; padding:2px 4px; flex:none; display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; }
+.course-star.on{ color:var(--amber); }
+.course-star:active{ transform:scale(0.85); }
 .course-done-title{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin:16px 0 4px; }
+#course-cat-sel{ font-size:13px; padding:7px 8px; border:1px solid var(--line); border-radius:8px; font-family:'Inter',sans-serif; background:#fff; max-width:40%; }
 .envie-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:14px; }
 .envie-card{ background:var(--bg-card); border:1px solid var(--line); border-radius:16px; overflow:hidden; cursor:pointer; transition:transform .12s; -webkit-tap-highlight-color:transparent; box-shadow:0 2px 8px rgba(27,33,64,0.05); }
 .envie-card:active{ transform:scale(0.97); }
@@ -712,7 +719,8 @@ const ICON = {
   dumbbell:SVG('<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>', 34, 1.3),
   body:    SVG('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6M12 9l-4 2M12 9l4 2M12 13l-3 7M12 13l3 7"/>', 15, 1.7),
   tomorrow:SVG('<path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 4 21 9 16 9"/>', 15, 1.9),
-  heart:   SVG('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>', 34, 1.4)
+  heart:   SVG('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/>', 34, 1.4),
+  starOn:  '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" style="display:block"><polygon points="12 2 15.1 8.6 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.6"/></svg>'
 };
 
 const CATS = {
@@ -1723,61 +1731,50 @@ async function renderCourses(){
   courses = await sget('courses') || [];
   const wrap = document.getElementById('courses-content');
   if(!wrap) return;
-  if(currentCourseCat){ renderCourseCategory(wrap, currentCourseCat); }
-  else { renderCourseGrid(wrap); }
-}
+  const toBuy = courses.filter(c=>!c.done);
+  const bought = courses.filter(c=>c.done);
+  // grouper par catégorie, urgents en premier
+  const groups = {};
+  COURSE_CATS.forEach(c=>groups[c]=[]);
+  toBuy.forEach(c=>groups[courseCatOf(c)].push(c));
+  Object.values(groups).forEach(g=>g.sort((a,b)=>(b.urgent?1:0)-(a.urgent?1:0)));
+  const nonEmpty = COURSE_CATS.filter(c=>groups[c].length);
 
-function courseCatOf(c){ return COURSE_CATS.includes(c.cat) ? c.cat : 'Autre'; }
-
-function renderCourseGrid(wrap){
-  const counts = {};
-  COURSE_CATS.forEach(c=>counts[c]=0);
-  courses.forEach(c=>{ if(!c.done) counts[courseCatOf(c)]++; });
-  wrap.innerHTML = `
+  let html = `
     <div class="card">
       <div class="card-title"><span>Mes courses</span></div>
-      <p style="font-size:12.5px; color:var(--ink-soft); margin:0;">Choisis une catégorie pour voir ou ajouter ce que tu dois acheter.</p>
-    </div>
-    <div class="meal-cat-grid">
-      ${COURSE_CATS.map(c=>`
-        <button class="meal-cat-card" data-coursecard="${c}">
-          <div class="meal-cat-icon">${COURSE_CAT_ICON[c]}</div>
-          <div class="meal-cat-card-name">${c}</div>
-          <div class="meal-cat-card-count">${counts[c]} à acheter</div>
-        </button>`).join('')}
-    </div>`;
-  wrap.querySelectorAll('[data-coursecard]').forEach(b=>{
-    b.onclick = ()=>{ currentCourseCat = b.dataset.coursecard; renderCourses(); };
-  });
-}
-
-function renderCourseCategory(wrap, cat){
-  const list = courses.filter(c=>courseCatOf(c)===cat);
-  const todo = list.filter(c=>!c.done);
-  const done = list.filter(c=>c.done);
-  wrap.innerHTML = `
-    <button class="meal-back" id="course-back">‹ Toutes les catégories</button>
-    <div class="card">
-      <div class="meal-cat-header">
-        <span class="meal-cat-header-title">${COURSE_CAT_ICON[cat]} ${cat}</span>
-      </div>
-      <div class="add-row" style="margin-top:4px;">
+      <div class="add-row" style="margin-top:6px;">
         <input type="text" id="course-input" placeholder="Ajouter un article...">
+        <select id="course-cat-sel">${COURSE_CATS.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
         <button class="btn" id="course-add">+</button>
       </div>
-      <div id="course-todo" style="margin-top:14px;">
-        ${todo.length ? todo.map(c=>courseRow(c)).join('') : '<div class="empty-state">Rien à acheter ici.</div>'}
-      </div>
-      ${done.length ? `
-        <div class="course-done-title">Acheté (${done.length})</div>
-        <div id="course-done">${done.map(c=>courseRow(c)).join('')}</div>` : ''}
     </div>`;
-  wrap.querySelector('#course-back').onclick = ()=>{ currentCourseCat = null; renderCourses(); };
+
+  if(nonEmpty.length){
+    html += nonEmpty.map(cat=>`
+      <div class="card">
+        <div class="course-cat-head">${COURSE_CAT_ICON[cat]} ${cat}</div>
+        <div>${groups[cat].map(c=>courseRow(c)).join('')}</div>
+      </div>`).join('');
+  } else if(!bought.length){
+    html += '<div class="card"><div class="empty-state">Aucun article à acheter. Ajoute-en un ci-dessus.</div></div>';
+  }
+
+  if(bought.length){
+    html += `<div class="card">
+      <div class="course-cat-head" style="color:var(--ink-soft);">Acheté (${bought.length})</div>
+      <div>${bought.map(c=>courseRow(c)).join('')}</div>
+    </div>`;
+  }
+
+  wrap.innerHTML = html;
+
   const addFn = async ()=>{
     const inp = wrap.querySelector('#course-input');
     const text = inp.value.trim();
     if(!text) return;
-    courses.push({ id:uid(), text, cat, done:false });
+    const cat = wrap.querySelector('#course-cat-sel').value;
+    courses.push({ id:uid(), text, cat, done:false, urgent:false });
     await sset('courses', courses);
     inp.value='';
     renderCourses();
@@ -1787,10 +1784,13 @@ function renderCourseCategory(wrap, cat){
   bindCourseRows(wrap);
 }
 
+function courseCatOf(c){ return COURSE_CATS.includes(c.cat) ? c.cat : 'Autre'; }
+
 function courseRow(c){
-  return `<div class="course-row ${c.done?'done':''}">
+  return `<div class="course-row ${c.done?'done':''} ${c.urgent&&!c.done?'urgent':''}">
     <div class="task-check ${c.done?'done':''}" data-cchk="${c.id}">${c.done?ICON.checkXs:''}</div>
     <div class="task-text ${c.done?'done':''}">${c.text}</div>
+    ${!c.done ? `<button class="course-star ${c.urgent?'on':''}" data-cstar="${c.id}" aria-label="Marquer urgent">${c.urgent?ICON.starOn:ICON.star}</button>` : ''}
     <button class="habit-del" style="visibility:visible;" data-cdel2="${c.id}">${ICON.close}</button>
   </div>`;
 }
@@ -1799,7 +1799,13 @@ function bindCourseRows(wrap){
   wrap.querySelectorAll('[data-cchk]').forEach(el=>{
     el.onclick = async ()=>{
       const c = courses.find(x=>x.id===el.dataset.cchk);
-      if(c){ c.done = !c.done; await sset('courses', courses); renderCourses(); }
+      if(c){ c.done = !c.done; if(c.done) c.urgent=false; await sset('courses', courses); renderCourses(); }
+    };
+  });
+  wrap.querySelectorAll('[data-cstar]').forEach(el=>{
+    el.onclick = async ()=>{
+      const c = courses.find(x=>x.id===el.dataset.cstar);
+      if(c){ c.urgent = !c.urgent; await sset('courses', courses); renderCourses(); }
     };
   });
   wrap.querySelectorAll('[data-cdel2]').forEach(el=>{
