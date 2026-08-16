@@ -1473,7 +1473,7 @@ function openRecipeView(m){
       <ol class="recipe-steps-list">${stepList.map(s=>`<li>${s}</li>`).join('')}</ol>` : ''}
     ${(!ingList.length && !stepList.length && !m.youtube) ? '<div class="empty-state">Aucun détail pour l\'instant. Appuie sur le crayon pour compléter la recette.</div>' : ''}
     <div style="height:10px;"></div>`;
-  box.querySelector('#recipe-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openMealDrawer(m), 280); };
+  box.querySelector('#recipe-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openMealDrawer(m), 340); };
   showDrawer();
   overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
 }
@@ -1647,7 +1647,7 @@ function openSportView(s){
       <ol class="recipe-steps-list">${stepList.map(x=>`<li>${x}</li>`).join('')}</ol>` : ''}
     ${(!stepList.length && !s.youtube && !infos.length) ? '<div class="empty-state">Aucun détail pour l\'instant. Appuie sur le crayon pour compléter.</div>' : ''}
     <div style="height:10px;"></div>`;
-  box.querySelector('#sport-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openSportDrawer(s), 280); };
+  box.querySelector('#sport-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openSportDrawer(s), 340); };
   showDrawer();
   overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
 }
