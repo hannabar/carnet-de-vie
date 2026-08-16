@@ -100,7 +100,61 @@ html, body{ max-width:100%; overflow-x:hidden; }
 .badge{ font-size:10.5px; padding:2px 8px; border-radius:999px; font-weight:600; flex:none; }
 
 /* ADD ROW */
+.quote-card{ display:flex; align-items:flex-start; gap:10px; background:var(--bg-card); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:12px; padding:13px 15px; margin-bottom:16px; }
+.meal-cat-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:14px; }
+.meal-cat-card{ display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:20px 12px; cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; }
+.meal-cat-card:active{ transform:scale(0.96); }
+.meal-cat-card:hover{ border-color:var(--amber); }
+.meal-cat-icon{ color:var(--amber); display:flex; align-items:center; justify-content:center; }
+.meal-cat-card-name{ font-family:'Fraunces',serif; font-size:15px; font-weight:600; color:var(--indigo-deep); }
+.meal-cat-card-count{ font-size:11px; color:var(--ink-soft); }
+.meal-back{ background:none; border:none; color:var(--ink-soft); font-family:'Inter',sans-serif; font-size:13px; font-weight:600; padding:4px 0; margin-bottom:10px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.meal-back:active{ color:var(--indigo-deep); }
+.meal-cat-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.meal-cat-header-title{ display:flex; align-items:center; gap:8px; font-family:'Fraunces',serif; font-size:19px; font-weight:600; color:var(--indigo-deep); }
+.meal-cat-header-title svg{ color:var(--amber); }
+.meal-carousel{ display:flex; gap:14px; overflow-x:auto; padding:12px 2px 8px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.meal-carousel::-webkit-scrollbar{ display:none; }
+.meal-carousel .meal-card{ flex:0 0 88%; scroll-snap-align:center; }
+.meal-card{ background:var(--bg); border:1px solid var(--line); border-radius:18px; overflow:hidden; cursor:pointer; transition:transform .12s; -webkit-tap-highlight-color:transparent; box-shadow:0 2px 10px rgba(27,33,64,0.05); }
+.meal-card:active{ transform:scale(0.98); }
+.meal-photo{ width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:var(--amber-pale); }
+.meal-photo-empty{ width:100%; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; background:var(--amber-pale); color:var(--amber); }
+.meal-name{ padding:12px 15px 4px; font-family:'Fraunces',serif; font-size:18px; font-weight:600; color:var(--indigo-deep); line-height:1.3; }
+.meal-note{ padding:0 15px 14px; font-size:13.5px; color:var(--ink-soft); line-height:1.45; }
+.recipe-hero{ width:calc(100% + 40px); margin:-10px -20px 0; max-height:240px; object-fit:cover; display:block; }
+.recipe-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-top:16px; }
+.recipe-title{ font-family:'Fraunces',serif; font-size:23px; font-weight:600; color:var(--indigo-deep); margin:0; line-height:1.2; }
+.icon-btn-sm{ flex:none; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--line); border-radius:10px; color:var(--ink-soft); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.icon-btn-sm:active{ transform:scale(0.92); }
+.recipe-cat-badge{ display:inline-block; font-size:11px; font-weight:600; color:var(--amber); background:var(--amber-pale); padding:3px 11px; border-radius:999px; margin-top:8px; }
+.recipe-times{ display:flex; gap:10px; margin-top:14px; }
+.recipe-time{ flex:1; display:flex; align-items:center; gap:9px; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:10px 12px; font-size:11.5px; color:var(--ink-soft); }
+.recipe-time svg{ color:var(--amber); flex:none; }
+.recipe-time b{ font-size:14px; color:var(--indigo-deep); font-weight:600; }
+.recipe-yt{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; background:#FBEBEB; border:1px solid #E9B8B8; color:#C0392B; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; padding:11px; border-radius:12px; text-decoration:none; -webkit-tap-highlight-color:transparent; }
+.recipe-yt:active{ transform:scale(0.98); }
+.recipe-section-title{ display:flex; align-items:center; gap:8px; font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--indigo-deep); margin:20px 0 10px; }
+.recipe-section-title svg{ color:var(--amber); }
+.recipe-ing-list{ list-style:none; padding:0; margin:0; }
+.recipe-ing-list li{ position:relative; padding:7px 0 7px 20px; font-size:14px; color:var(--ink); border-bottom:1px solid var(--line); }
+.recipe-ing-list li:last-child{ border-bottom:none; }
+.recipe-ing-list li::before{ content:''; position:absolute; left:2px; top:14px; width:6px; height:6px; border-radius:50%; background:var(--amber); }
+.recipe-steps-list{ padding:0; margin:0; counter-reset:step; list-style:none; }
+.recipe-steps-list li{ position:relative; padding:4px 0 16px 40px; font-size:14px; color:var(--ink); line-height:1.5; }
+.recipe-steps-list li::before{ counter-increment:step; content:counter(step); position:absolute; left:0; top:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:var(--amber-pale); color:var(--amber-deep, #B8860B); font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; border-radius:50%; }
+.btn-danger{ display:inline-flex; align-items:center; gap:5px; background:none; border:1px solid var(--rose); color:var(--rose); font-family:'Inter',sans-serif; font-size:13px; font-weight:600; padding:9px 12px; border-radius:10px; cursor:pointer; flex:none; -webkit-tap-highlight-color:transparent; }
+.btn-danger:active{ transform:scale(0.97); background:#FBEEEE; }
+.quote-card svg{ color:var(--amber); flex:none; margin-top:2px; opacity:.8; }
+.quote-text{ font-family:'Fraunces',serif; font-size:14.5px; font-style:italic; color:var(--indigo-deep); line-height:1.45; }
 .today-events-card{ background:linear-gradient(135deg, var(--amber-pale), var(--amber-soft)); border:1px solid var(--amber-soft); border-radius:var(--radius); padding:14px 16px; margin-bottom:16px; }
+.today-warn-btn{ display:flex; align-items:center; gap:10px; width:100%; background:#FDF3E3; border:1px solid #E9C87F; border-radius:14px; padding:11px 14px; margin-bottom:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; text-align:left; }
+.today-warn-btn:active{ transform:scale(0.99); }
+.today-warn-btn svg{ color:#B8860B; flex:none; }
+.today-warn-text{ flex:1; font-size:13.5px; font-weight:600; color:#8A5F17; }
+.today-warn-arrow{ font-size:20px; color:#C9A24B; flex:none; }
+.day-section-label{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+.day-section-label svg{ color:var(--amber); }
 .bilan-big{ font-family:'Fraunces',serif; font-size:40px; font-weight:600; color:var(--indigo-deep); line-height:1; margin-top:4px; }
 .bilan-sub{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
 .bilan-chart{ width:100%; overflow:hidden; }
@@ -340,11 +394,15 @@ html, body{ max-width:100%; overflow-x:hidden; }
     <button class="nav-card" data-tab="commercial"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17.5 8.6 19a1.6 1.6 0 0 1-2.3-2.1l-2-2.2a1.7 1.7 0 0 1 .2-2.4L8 8.5h4l2-1.5 6 1v7l-2 1-3.5-2.5"/><path d="M13.5 16.5 11 14"/></svg></span><span class="nav-label">Commercial</span></button>
     <button class="nav-card" data-tab="etudes"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11.5V17c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6v-5.5"/></svg></span><span class="nav-label">Études</span></button>
     <button class="nav-card" data-tab="bilan"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></span><span class="nav-label">Bilan</span></button>
+    <button class="nav-card" data-tab="repas"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h0a2 2 0 0 0 2-2V2M5 2v20M11 2v20M11 8c0-2 1.5-4 3.5-4S18 6 18 8s-1 3-2 3v11"/></svg></span><span class="nav-label">Menu</span></button>
+    <button class="nav-card" data-tab="sport"><span class="nav-icon"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/></svg></span><span class="nav-label">Sport</span></button>
   </div>
 
   <!-- TODAY -->
   <div class="view active" id="view-today">
+    <div id="daily-quote"></div>
     <div id="today-events"></div>
+    <div id="today-reminders"></div>
     <div class="card">
       <div class="card-title">
         <span>Cures en cours</span>
@@ -484,6 +542,14 @@ html, body{ max-width:100%; overflow-x:hidden; }
     </div>
   </div>
 
+  <div class="view" id="view-repas">
+    <div id="meals-content"></div>
+  </div>
+
+  <div class="view" id="view-sport">
+    <div id="sport-content"></div>
+  </div>
+
   <div class="modal-overlay" id="day-modal-overlay" style="display:none;">
     <div class="modal-box" id="day-modal-box"></div>
   </div>
@@ -547,6 +613,50 @@ html, body{ max-width:100%; overflow-x:hidden; }
 </div>
 
 <script>
+const QUOTES = [
+  "Un jour à la fois, c'est déjà avancer.",
+  "Prends soin de toi comme tu prendrais soin d'une amie.",
+  "Chaque petit pas compte, même les plus discrets.",
+  "Tu n'as pas besoin d'être parfaite, juste d'être là.",
+  "La douceur envers soi-même est une forme de courage.",
+  "Ce que tu construis aujourd'hui, tu le remercieras demain.",
+  "Respire. Tu fais de ton mieux, et c'est suffisant.",
+  "Les grandes choses se font par une suite de petites choses.",
+  "Avance à ton rythme, la course n'est qu'avec toi-même.",
+  "Le progrès vaut mieux que la perfection.",
+  "Sois patiente : tout ce qui pousse a besoin de temps.",
+  "Ta valeur ne dépend pas de ta productivité.",
+  "Un petit effort aujourd'hui vaut mieux qu'un grand demain.",
+  "Célèbre tes victoires, même minuscules.",
+  "Tu es plus forte que tu ne le crois.",
+  "Le calme est aussi une réussite.",
+  "Recommencer n'est pas échouer, c'est persévérer.",
+  "Fais-toi confiance : tu as déjà surmonté tant de choses.",
+  "La discipline est une façon de s'aimer sur le long terme.",
+  "Aujourd'hui est une page blanche, écris-la avec douceur.",
+  "Le repos fait partie du chemin, pas à côté.",
+  "Chaque matin est une nouvelle chance de bien faire.",
+  "Ce n'est pas grave de ralentir, l'important est de continuer.",
+  "Tes efforts invisibles préparent des résultats visibles.",
+  "Sème aujourd'hui, tu récolteras plus tard.",
+  "La constance transforme les rêves en habitudes.",
+  "Sois fière du chemin parcouru, pas seulement du reste à faire.",
+  "Un cœur apaisé voit plus clair.",
+  "Tu mérites la même patience que tu offres aux autres.",
+  "Les petites routines construisent les grandes vies.",
+  "N'attends pas d'être prête : commence, tu apprendras en marchant.",
+  "Ce que tu répètes chaque jour devient qui tu es.",
+  "Sois indulgente les jours sans, fière les jours avec.",
+  "Le bonheur se cache souvent dans les petites choses ordinaires.",
+  "Ton avenir se construit dans ce que tu fais maintenant.",
+  "Garde confiance : les saisons difficiles passent aussi."
+];
+function dayOfYear(d=new Date()){
+  const start = new Date(d.getFullYear(),0,0);
+  return Math.floor((d - start)/86400000);
+}
+function quoteOfDay(){ return QUOTES[dayOfYear() % QUOTES.length]; }
+
 const SVG = (p, s=14, sw=2.4) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" style="display:block">${p}</svg>`;
 const ICON = {
   check:   SVG('<polyline points="20 6 9 17 4 12"/>', 13),
@@ -559,7 +669,18 @@ const ICON = {
   lock:    SVG('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', 19, 1.8),
   checkPad:SVG('<polyline points="20 6 9 17 4 12"/>', 22, 2.6),
   star:    SVG('<polygon points="12 2 15.1 8.6 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.6"/>', 14, 1.8),
-  plus:    SVG('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>', 15, 2.4)
+  plus:    SVG('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>', 15, 2.4),
+  warn:    SVG('<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>', 14, 1.9),
+  quote:   SVG('<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2-2-2H4c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2h2.5c0 1-.5 3-3.5 3zM14 21c3 0 7-1 7-8V5c0-1.25-.757-2-2-2h-4c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2h2.5c0 1-.5 3-3.5 3z"/>', 16, 1.4),
+  repasBig:SVG('<path d="M3 2v7c0 1.1.9 2 2 2a2 2 0 0 0 2-2V2M5 2v20M11 2v20M11 8c0-2 1.5-4 3.5-4S18 6 18 8s-1 3-2 3v11"/>', 34, 1.3),
+  clock:   SVG('<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>', 15, 1.9),
+  flame:   SVG('<path d="M12 2C9 6 6 8 6 13a6 6 0 0 0 12 0c0-2-1-3.6-2-5-.5 1-1 1.4-2 1.4C14 6.5 13 4 12 2z"/>', 15, 1.7),
+  leaf:    SVG('<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/>', 15, 1.7),
+  steps:   SVG('<line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1.3"/><circle cx="4.5" cy="12" r="1.3"/><circle cx="4.5" cy="18" r="1.3"/>', 15, 1.7),
+  pencil:  SVG('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', 15, 1.9),
+  play:    SVG('<rect x="2" y="4" width="20" height="16" rx="4"/><polygon points="10 8 16 12 10 16" fill="currentColor" stroke="none"/>', 16, 1.7),
+  dumbbell:SVG('<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>', 34, 1.3),
+  body:    SVG('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6M12 9l-4 2M12 9l4 2M12 13l-3 7M12 13l3 7"/>', 15, 1.7)
 };
 
 const CATS = {
@@ -787,11 +908,7 @@ async function renderTodayEvents(){
   const el = document.getElementById('today-events');
   if(!el) return;
   const events = await sget('events:'+todayKey()) || [];
-  const dow = new Date().getDay();
-  const fixed = [];
-  if(dow===0) fixed.push('Talmud Torah · 10h–12h30', 'Faire le pain');
-  if(dow===6) fixed.push('Laver le linge');
-  const all = [...fixed.map(t=>({text:t, fixed:true})), ...events.map(e=>({text:e.text}))];
+  const all = events.map(e=>({text:e.text}));
   if(!all.length){ el.innerHTML = ''; return; }
   el.innerHTML = `<div class="today-events-card">
     <div class="today-events-title">${ICON.star} Aujourd'hui</div>
@@ -799,8 +916,55 @@ async function renderTodayEvents(){
   </div>`;
 }
 
+async function renderTodayReminders(){
+  const el = document.getElementById('today-reminders');
+  if(!el) return;
+  const reminders = (await sget('reminders:'+todayKey()) || []).filter(r=>!r.done);
+  if(!reminders.length){ el.innerHTML = ''; return; }
+  el.innerHTML = `<button class="today-warn-btn" id="today-warn-btn">
+    ${ICON.warn}
+    <span class="today-warn-text">${reminders.length} rappel${reminders.length>1?'s':''} aujourd'hui</span>
+    <span class="today-warn-arrow">›</span>
+  </button>`;
+  el.querySelector('#today-warn-btn').onclick = ()=>openRemindersDrawer(reminders);
+}
+
+function openRemindersDrawer(reminders){
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const key = todayKey();
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    <div class="modal-head">
+      <h3 class="modal-title">${ICON.warn} Rappels du jour</h3>
+      <button class="modal-close" id="modal-close-btn" aria-label="Fermer">${ICON.close}</button>
+    </div>
+    <div id="today-rem-list">
+      ${reminders.map(r=>`<div class="habit-row" style="border:none;">
+        <div class="habit-check" data-remcheck="${r.id}"></div>
+        <div style="flex:1"><div class="habit-name">${r.text}</div></div>
+      </div>`).join('')}
+    </div>
+    <div class="settings-foot">Coche un rappel pour le marquer comme fait.</div>`;
+  box.querySelector('#modal-close-btn').onclick = closeDayModal;
+  box.querySelectorAll('[data-remcheck]').forEach(el=>{
+    el.onclick = async ()=>{
+      const all = await sget('reminders:'+key) || [];
+      const r = all.find(x=>x.id===el.dataset.remcheck);
+      if(r){ r.done = true; await sset('reminders:'+key, all); }
+      closeDayModal();
+      renderTodayReminders();
+    };
+  });
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+}
+
 async function renderToday(){
+  const q = document.getElementById('daily-quote');
+  if(q) q.innerHTML = `<div class="quote-card">${ICON.quote}<span class="quote-text">${quoteOfDay()}</span></div>`;
   renderTodayEvents();
+  renderTodayReminders();
   const epilRef = await sget('epilation-ref') || todayKey();
   window.__epilRef = epilRef;
 
@@ -1140,6 +1304,355 @@ async function renderBilan(){
   }).join('') : '<div class="empty-state">Aucun objectif défini.</div>';
 }
 
+/* ===== MENU / IDÉES REPAS ===== */
+let meals = [];
+const MEAL_CATS = ['Soupe','Salade','Entrée','Plat','Goûter','Dessert'];
+const MEAL_CAT_ICON = {
+  'Soupe':   SVG('<path d="M4 11h16a1 1 0 0 1 1 1 8 8 0 0 1-8 8H11a8 8 0 0 1-8-8 1 1 0 0 1 1-1z"/><path d="M8.5 7c0-1 .5-1.5.5-2.5S8.5 3 8.5 2M12 7c0-1 .5-1.5.5-2.5S12 3 12 2M15.5 7c0-1 .5-1.5.5-2.5S15.5 3 15.5 2"/>', 26, 1.6),
+  'Salade':  SVG('<path d="M4 10h16a2 2 0 0 1-2 6H6a2 2 0 0 1-2-6z"/><path d="M12 10c-1-3-4-4-6-3 1 3 4 4 6 3zM12 10c1-2.5 3.5-3 5.5-2-1 2.5-3.5 3-5.5 2z"/>', 26, 1.6),
+  'Entrée':  SVG('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>', 26, 1.6),
+  'Plat':    SVG('<path d="M3 11h18M12 11V3M12 3a4 4 0 0 0-4 4c0 2 1.5 3 4 4M12 3a4 4 0 0 1 4 4c0 2-1.5 3-4 4"/><path d="M5 11a7 7 0 0 0 14 0"/>', 26, 1.5),
+  'Goûter':  SVG('<path d="M5 8h11v3a5.5 5.5 0 0 1-11 0z"/><path d="M16 8h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M7 4c0 .8-.5 1-.5 1.8M10 4c0 .8-.5 1-.5 1.8M13 4c0 .8-.5 1-.5 1.8"/>', 26, 1.5),
+  'Dessert': SVG('<path d="M6 14h12l-1 6a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"/><path d="M6 14a6 6 0 0 1 12 0"/><circle cx="12" cy="5" r="1.4"/><path d="M12 6.5V8"/>', 26, 1.5)
+};
+let currentMealCat = null;
+
+async function renderRepas(){
+  meals = await sget('meal-ideas') || [];
+  const wrap = document.getElementById('meals-content');
+  if(!wrap) return;
+  if(currentMealCat){ renderMealCategory(wrap, currentMealCat); }
+  else { renderMealGrid(wrap); }
+}
+
+function mealCatOf(m){ return MEAL_CATS.includes(m.cat) ? m.cat : 'Plat'; }
+
+function renderMealGrid(wrap){
+  const counts = {};
+  MEAL_CATS.forEach(c=>counts[c]=0);
+  meals.forEach(m=>{ counts[mealCatOf(m)]++; });
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-title"><span>Mon menu</span></div>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0;">Choisis une catégorie pour voir ou ajouter tes idées.</p>
+    </div>
+    <div class="meal-cat-grid">
+      ${MEAL_CATS.map(c=>`
+        <button class="meal-cat-card" data-catcard="${c}">
+          <div class="meal-cat-icon">${MEAL_CAT_ICON[c]}</div>
+          <div class="meal-cat-card-name">${c}</div>
+          <div class="meal-cat-card-count">${counts[c]} idée${counts[c]>1?'s':''}</div>
+        </button>`).join('')}
+    </div>`;
+  wrap.querySelectorAll('[data-catcard]').forEach(b=>{
+    b.onclick = ()=>{ currentMealCat = b.dataset.catcard; renderRepas(); };
+  });
+}
+
+function renderMealCategory(wrap, cat){
+  const list = meals.filter(m=>mealCatOf(m)===cat);
+  wrap.innerHTML = `
+    <button class="meal-back" id="meal-back">‹ Toutes les catégories</button>
+    <div class="card">
+      <div class="meal-cat-header">
+        <span class="meal-cat-header-title">${MEAL_CAT_ICON[cat]} ${cat}</span>
+        <button class="card-add" id="add-meal-cat" aria-label="Ajouter une recette">+</button>
+      </div>
+      ${list.length
+        ? `<div class="meal-carousel">${list.map(m=>`
+            <div class="meal-card" data-meal="${m.id}">
+              ${m.img
+                ? `<img class="meal-photo" src="${m.img.replace(/"/g,'&quot;')}" alt="${(m.name||'').replace(/"/g,'&quot;')}" onerror="this.outerHTML='<div class=\\'meal-photo-empty\\'>'+ICON.repasBig+'</div>'">`
+                : `<div class="meal-photo-empty">${ICON.repasBig}</div>`}
+              <div class="meal-name">${m.name||'Sans nom'}</div>
+            </div>`).join('')}</div>`
+        : '<div class="empty-state">Aucune idée ici pour l\'instant. Ajoute-en une avec le +.</div>'}
+    </div>`;
+  wrap.querySelector('#meal-back').onclick = ()=>{ currentMealCat = null; renderRepas(); };
+  wrap.querySelector('#add-meal-cat').onclick = ()=>openMealDrawer(null, cat);
+  wrap.querySelectorAll('[data-meal]').forEach(c=>{
+    c.onclick = ()=>openRecipeView(meals.find(x=>x.id===c.dataset.meal));
+  });
+}
+
+function openMealDrawer(meal, defaultCat){
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const editing = !!meal;
+  const m = meal || { id:uid(), name:'', img:'', cat: defaultCat || 'Plat', prep:'', cook:'', ingredients:'', steps:'', youtube:'' };
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    <div class="modal-head">
+      <h3 class="modal-title">${editing ? 'Modifier la recette' : 'Nouvelle recette'}</h3>
+      <button class="modal-close" id="modal-close-btn" aria-label="Fermer">${ICON.close}</button>
+    </div>
+    ${m.img ? `<img src="${m.img.replace(/"/g,'&quot;')}" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px;" onerror="this.style.display='none'">` : ''}
+    <div class="form-grid">
+      <input type="text" id="meal-name" placeholder="Nom du plat" value="${(m.name||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <div class="form-grid">
+      <select id="meal-cat" style="flex:1 1 100%;">
+        ${MEAL_CATS.map(c=>`<option value="${c}" ${m.cat===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-grid">
+      <input type="text" id="meal-img" placeholder="Lien de la photo (facultatif)" value="${(m.img||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <p style="font-size:11px; color:var(--ink-soft); margin:2px 0 8px;">Astuce : sur Pinterest, appui long sur l'image → « Copier l'adresse de l'image ».</p>
+    <div class="form-grid">
+      <input type="text" id="meal-prep" placeholder="Préparation (ex: 15 min)" value="${(m.prep||'').replace(/"/g,'&quot;')}" style="flex:1 1 45%;">
+      <input type="text" id="meal-cook" placeholder="Cuisson (ex: 30 min)" value="${(m.cook||'').replace(/"/g,'&quot;')}" style="flex:1 1 45%;">
+    </div>
+    <div class="form-grid" style="margin-top:8px;">
+      <textarea id="meal-ing" placeholder="Ingrédients (un par ligne)" style="width:100%; box-sizing:border-box; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-family:'Inter',sans-serif; font-size:13px; resize:vertical; min-height:70px; background:#fff;">${(m.ingredients||'').replace(/</g,'&lt;')}</textarea>
+    </div>
+    <div class="form-grid" style="margin-top:8px;">
+      <textarea id="meal-steps" placeholder="Étapes de préparation (une par ligne)" style="width:100%; box-sizing:border-box; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-family:'Inter',sans-serif; font-size:13px; resize:vertical; min-height:90px; background:#fff;">${(m.steps||'').replace(/</g,'&lt;')}</textarea>
+    </div>
+    <div class="form-grid" style="margin-top:8px;">
+      <input type="text" id="meal-yt" placeholder="Lien vidéo YouTube (facultatif)" value="${(m.youtube||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <div class="add-row" style="margin-top:12px;">
+      <button class="btn" id="meal-save" style="flex:1;">${editing ? 'Enregistrer' : 'Ajouter'}</button>
+      ${editing ? `<button class="btn-danger" id="meal-delete">${ICON.close} Supprimer</button>` : ''}
+    </div>`;
+  box.querySelector('#modal-close-btn').onclick = closeDayModal;
+  box.querySelector('#meal-save').onclick = async ()=>{
+    const name = box.querySelector('#meal-name').value.trim();
+    if(!name){ closeDayModal(); return; }
+    m.name = name;
+    m.cat = box.querySelector('#meal-cat').value;
+    m.img = box.querySelector('#meal-img').value.trim();
+    m.prep = box.querySelector('#meal-prep').value.trim();
+    m.cook = box.querySelector('#meal-cook').value.trim();
+    m.ingredients = box.querySelector('#meal-ing').value.trim();
+    m.steps = box.querySelector('#meal-steps').value.trim();
+    m.youtube = box.querySelector('#meal-yt').value.trim();
+    if(!editing) meals.push(m);
+    else { const i = meals.findIndex(x=>x.id===m.id); if(i>=0) meals[i] = m; }
+    await sset('meal-ideas', meals);
+    closeDayModal();
+    renderRepas();
+  };
+  if(editing){
+    box.querySelector('#meal-delete').onclick = async ()=>{
+      meals = meals.filter(x=>x.id!==m.id);
+      await sset('meal-ideas', meals);
+      closeDayModal();
+      renderRepas();
+    };
+  }
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+  setTimeout(()=>box.querySelector('#meal-name').focus(), 320);
+}
+
+function openRecipeView(m){
+  if(!m) return;
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const ingList = (m.ingredients||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const stepList = (m.steps||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const times = [];
+  if(m.prep) times.push(`<div class="recipe-time">${ICON.clock}<span>Prépa<br><b>${m.prep}</b></span></div>`);
+  if(m.cook) times.push(`<div class="recipe-time">${ICON.flame}<span>Cuisson<br><b>${m.cook}</b></span></div>`);
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    ${m.img ? `<img class="recipe-hero" src="${m.img.replace(/"/g,'&quot;')}" onerror="this.style.display='none'">` : ''}
+    <div class="recipe-head">
+      <h3 class="recipe-title">${m.name||'Sans nom'}</h3>
+      <button class="icon-btn-sm" id="recipe-edit" aria-label="Modifier">${ICON.pencil}</button>
+    </div>
+    <div class="recipe-cat-badge">${m.cat||'Plat'}</div>
+    ${times.length ? `<div class="recipe-times">${times.join('')}</div>` : ''}
+    ${m.youtube ? `<a class="recipe-yt" href="${m.youtube.replace(/"/g,'&quot;')}" target="_blank" rel="noopener">${ICON.play} Voir la vidéo</a>` : ''}
+    ${ingList.length ? `
+      <div class="recipe-section-title">${ICON.leaf} Ingrédients</div>
+      <ul class="recipe-ing-list">${ingList.map(i=>`<li>${i}</li>`).join('')}</ul>` : ''}
+    ${stepList.length ? `
+      <div class="recipe-section-title">${ICON.steps} Préparation</div>
+      <ol class="recipe-steps-list">${stepList.map(s=>`<li>${s}</li>`).join('')}</ol>` : ''}
+    ${(!ingList.length && !stepList.length && !m.youtube) ? '<div class="empty-state">Aucun détail pour l\'instant. Appuie sur le crayon pour compléter la recette.</div>' : ''}
+    <div style="height:10px;"></div>`;
+  box.querySelector('#recipe-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openMealDrawer(m), 280); };
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+}
+
+/* ===== SPORT ===== */
+let sports = [];
+const SPORT_CATS = ['Cardio','Musculation','Pilates','Souplesse','Respiration'];
+const SPORT_CAT_ICON = {
+  'Cardio':      SVG('<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>', 26, 1.7),
+  'Musculation': SVG('<path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10"/>', 26, 1.7),
+  'Pilates':     SVG('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v5M12 12l-4 2M12 12l4 2M7 21c1-3.5 3-5 5-5s4 1.5 5 5"/>', 26, 1.6),
+  'Souplesse':   SVG('<circle cx="8" cy="4" r="2"/><path d="M8 6.5c0 3 .5 4 3 5l5 1.5M8 11l-2 9M14 13l3 7"/>', 26, 1.6),
+  'Respiration': SVG('<path d="M4 8h8a2.5 2.5 0 1 0-2.5-2.5M4 12h11a2.5 2.5 0 1 1-2.5 2.5M4 16h6a2 2 0 1 0-2 2"/>', 26, 1.7)
+};
+const SPORT_DIFF = { 'Facile':'var(--sage)', 'Moyen':'var(--amber)', 'Difficile':'var(--terracotta)' };
+let currentSportCat = null;
+
+async function renderSport(){
+  sports = await sget('sport-ideas') || [];
+  const wrap = document.getElementById('sport-content');
+  if(!wrap) return;
+  if(currentSportCat){ renderSportCategory(wrap, currentSportCat); }
+  else { renderSportGrid(wrap); }
+}
+
+function sportCatOf(s){ return SPORT_CATS.includes(s.cat) ? s.cat : 'Cardio'; }
+
+function renderSportGrid(wrap){
+  const counts = {};
+  SPORT_CATS.forEach(c=>counts[c]=0);
+  sports.forEach(s=>{ counts[sportCatOf(s)]++; });
+  wrap.innerHTML = `
+    <div class="card">
+      <div class="card-title"><span>Mon sport</span></div>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0;">Choisis une catégorie pour voir ou ajouter tes exercices.</p>
+    </div>
+    <div class="meal-cat-grid">
+      ${SPORT_CATS.map(c=>`
+        <button class="meal-cat-card" data-sportcard="${c}">
+          <div class="meal-cat-icon">${SPORT_CAT_ICON[c]}</div>
+          <div class="meal-cat-card-name">${c}</div>
+          <div class="meal-cat-card-count">${counts[c]} exo${counts[c]>1?'s':''}</div>
+        </button>`).join('')}
+    </div>`;
+  wrap.querySelectorAll('[data-sportcard]').forEach(b=>{
+    b.onclick = ()=>{ currentSportCat = b.dataset.sportcard; renderSport(); };
+  });
+}
+
+function renderSportCategory(wrap, cat){
+  const list = sports.filter(s=>sportCatOf(s)===cat);
+  wrap.innerHTML = `
+    <button class="meal-back" id="sport-back">‹ Toutes les catégories</button>
+    <div class="card">
+      <div class="meal-cat-header">
+        <span class="meal-cat-header-title">${SPORT_CAT_ICON[cat]} ${cat}</span>
+        <button class="card-add" id="add-sport-cat" aria-label="Ajouter un exercice">+</button>
+      </div>
+      ${list.length
+        ? `<div class="meal-carousel">${list.map(s=>`
+            <div class="meal-card" data-sport="${s.id}">
+              ${s.img
+                ? `<img class="meal-photo" src="${s.img.replace(/"/g,'&quot;')}" alt="${(s.name||'').replace(/"/g,'&quot;')}" onerror="this.outerHTML='<div class=\\'meal-photo-empty\\'>'+ICON.dumbbell+'</div>'">`
+                : `<div class="meal-photo-empty">${ICON.dumbbell}</div>`}
+              <div class="meal-name">${s.name||'Sans nom'}</div>
+            </div>`).join('')}</div>`
+        : '<div class="empty-state">Aucun exercice ici pour l\'instant. Ajoute-en un avec le +.</div>'}
+    </div>`;
+  wrap.querySelector('#sport-back').onclick = ()=>{ currentSportCat = null; renderSport(); };
+  wrap.querySelector('#add-sport-cat').onclick = ()=>openSportDrawer(null, cat);
+  wrap.querySelectorAll('[data-sport]').forEach(c=>{
+    c.onclick = ()=>openSportView(sports.find(x=>x.id===c.dataset.sport));
+  });
+}
+
+function openSportDrawer(sport, defaultCat){
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const editing = !!sport;
+  const s = sport || { id:uid(), name:'', img:'', cat: defaultCat || 'Cardio', difficulty:'Moyen', duration:'', body:'', description:'', youtube:'' };
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    <div class="modal-head">
+      <h3 class="modal-title">${editing ? 'Modifier l\'exercice' : 'Nouvel exercice'}</h3>
+      <button class="modal-close" id="modal-close-btn" aria-label="Fermer">${ICON.close}</button>
+    </div>
+    ${s.img ? `<img src="${s.img.replace(/"/g,'&quot;')}" style="width:100%; max-height:200px; object-fit:cover; border-radius:12px; margin-bottom:12px;" onerror="this.style.display='none'">` : ''}
+    <div class="form-grid">
+      <input type="text" id="sport-name" placeholder="Nom de l'exercice" value="${(s.name||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <div class="form-grid">
+      <select id="sport-cat" style="flex:1 1 45%;">
+        ${SPORT_CATS.map(c=>`<option value="${c}" ${s.cat===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+      <select id="sport-diff" style="flex:1 1 45%;">
+        ${Object.keys(SPORT_DIFF).map(dd=>`<option value="${dd}" ${s.difficulty===dd?'selected':''}>${dd}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-grid">
+      <input type="text" id="sport-dur" placeholder="Durée (ex: 20 min)" value="${(s.duration||'').replace(/"/g,'&quot;')}" style="flex:1 1 45%;">
+      <input type="text" id="sport-body" placeholder="Partie du corps" value="${(s.body||'').replace(/"/g,'&quot;')}" style="flex:1 1 45%;">
+    </div>
+    <div class="form-grid">
+      <input type="text" id="sport-img" placeholder="Lien de la photo (facultatif)" value="${(s.img||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <div class="form-grid" style="margin-top:8px;">
+      <textarea id="sport-desc" placeholder="Description / étapes (une par ligne)" style="width:100%; box-sizing:border-box; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-family:'Inter',sans-serif; font-size:13px; resize:vertical; min-height:80px; background:#fff;">${(s.description||'').replace(/</g,'&lt;')}</textarea>
+    </div>
+    <div class="form-grid" style="margin-top:8px;">
+      <input type="text" id="sport-yt" placeholder="Lien vidéo YouTube (facultatif)" value="${(s.youtube||'').replace(/"/g,'&quot;')}" style="flex:1 1 100%;">
+    </div>
+    <div class="add-row" style="margin-top:12px;">
+      <button class="btn" id="sport-save" style="flex:1;">${editing ? 'Enregistrer' : 'Ajouter'}</button>
+      ${editing ? `<button class="btn-danger" id="sport-delete">${ICON.close} Supprimer</button>` : ''}
+    </div>`;
+  box.querySelector('#modal-close-btn').onclick = closeDayModal;
+  box.querySelector('#sport-save').onclick = async ()=>{
+    const name = box.querySelector('#sport-name').value.trim();
+    if(!name){ closeDayModal(); return; }
+    s.name = name;
+    s.cat = box.querySelector('#sport-cat').value;
+    s.difficulty = box.querySelector('#sport-diff').value;
+    s.duration = box.querySelector('#sport-dur').value.trim();
+    s.body = box.querySelector('#sport-body').value.trim();
+    s.img = box.querySelector('#sport-img').value.trim();
+    s.description = box.querySelector('#sport-desc').value.trim();
+    s.youtube = box.querySelector('#sport-yt').value.trim();
+    if(!editing) sports.push(s);
+    else { const i = sports.findIndex(x=>x.id===s.id); if(i>=0) sports[i] = s; }
+    await sset('sport-ideas', sports);
+    closeDayModal();
+    renderSport();
+  };
+  if(editing){
+    box.querySelector('#sport-delete').onclick = async ()=>{
+      sports = sports.filter(x=>x.id!==s.id);
+      await sset('sport-ideas', sports);
+      closeDayModal();
+      renderSport();
+    };
+  }
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+  setTimeout(()=>box.querySelector('#sport-name').focus(), 320);
+}
+
+function openSportView(s){
+  if(!s) return;
+  const overlay = document.getElementById('day-modal-overlay');
+  const box = document.getElementById('day-modal-box');
+  const stepList = (s.description||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const diffColor = SPORT_DIFF[s.difficulty] || 'var(--amber)';
+  const infos = [];
+  if(s.duration) infos.push(`<div class="recipe-time">${ICON.clock}<span>Durée<br><b>${s.duration}</b></span></div>`);
+  if(s.body) infos.push(`<div class="recipe-time">${ICON.body}<span>Cible<br><b>${s.body}</b></span></div>`);
+  box.innerHTML = `
+    <div class="drag-handle"></div>
+    ${s.img ? `<img class="recipe-hero" src="${s.img.replace(/"/g,'&quot;')}" onerror="this.style.display='none'">` : ''}
+    <div class="recipe-head">
+      <h3 class="recipe-title">${s.name||'Sans nom'}</h3>
+      <button class="icon-btn-sm" id="sport-edit" aria-label="Modifier">${ICON.pencil}</button>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+      <span class="recipe-cat-badge">${s.cat||'Cardio'}</span>
+      <span class="recipe-cat-badge" style="color:${diffColor}; background:${diffColor}22;">${s.difficulty||'Moyen'}</span>
+    </div>
+    ${infos.length ? `<div class="recipe-times">${infos.join('')}</div>` : ''}
+    ${s.youtube ? `<a class="recipe-yt" href="${s.youtube.replace(/"/g,'&quot;')}" target="_blank" rel="noopener">${ICON.play} Voir la vidéo</a>` : ''}
+    ${stepList.length ? `
+      <div class="recipe-section-title">${ICON.steps} Déroulé</div>
+      <ol class="recipe-steps-list">${stepList.map(x=>`<li>${x}</li>`).join('')}</ol>` : ''}
+    ${(!stepList.length && !s.youtube && !infos.length) ? '<div class="empty-state">Aucun détail pour l\'instant. Appuie sur le crayon pour compléter.</div>' : ''}
+    <div style="height:10px;"></div>`;
+  box.querySelector('#sport-edit').onclick = ()=>{ closeDayModal(); setTimeout(()=>openSportDrawer(s), 280); };
+  showDrawer();
+  overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+}
+
 function bindTabs(){
   document.querySelectorAll('.nav-card').forEach(t=>{
     t.onclick = ()=>{
@@ -1148,6 +1661,8 @@ function bindTabs(){
       t.classList.add('active');
       document.getElementById('view-'+t.dataset.tab).classList.add('active');
       if(t.dataset.tab === 'bilan') renderBilan();
+      if(t.dataset.tab === 'repas'){ currentMealCat = null; renderRepas(); }
+      if(t.dataset.tab === 'sport'){ currentSportCat = null; renderSport(); }
       if(typeof t.scrollIntoView === 'function'){ t.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
       window.scrollTo({top:0, behavior:'smooth'});
     };
@@ -1171,12 +1686,16 @@ async function renderCalendar(){
   const ym = monthKey(calMonth);
 
   const daysWithEvents = new Set();
-  const evList = { keys: lsListKeys('events:'+ym) };
-  if(evList && evList.keys){
-    for(const k of evList.keys){
-      const v = await sget(k);
-      if(v && v.length) daysWithEvents.add(k.replace('events:',''));
-    }
+  const daysWithTasks = new Set();
+  const daysWithReminders = new Set();
+  for(const k of lsListKeys('events:'+ym)){
+    const v = await sget(k); if(v && v.length) daysWithEvents.add(k.replace('events:',''));
+  }
+  for(const k of lsListKeys('tasks:'+ym)){
+    const v = await sget(k); if(v && v.length) daysWithTasks.add(k.replace('tasks:',''));
+  }
+  for(const k of lsListKeys('reminders:'+ym)){
+    const v = await sget(k); if(v && v.some(r=>!r.done)) daysWithReminders.add(k.replace('reminders:',''));
   }
 
   for(let i=0;i<startOffset;i++){ const e=document.createElement('div'); e.className='cal-day empty'; grid.appendChild(e); }
@@ -1184,13 +1703,12 @@ async function renderCalendar(){
   for(let d=1; d<=daysInMonth; d++){
     const dateObj = new Date(year,month,d);
     const key = todayKey(dateObj);
-    const dow = dateObj.getDay();
     const cell = document.createElement('div');
     cell.className = 'cal-day' + (key===todayKey() ? ' today' : '');
     const marks = [];
-    if(dow===0) marks.push('<span class="mark" style="background:var(--indigo)"></span>');
-    if(dow===6) marks.push('<span class="mark" style="background:var(--terracotta)"></span>');
     if(daysWithEvents.has(key)) marks.push('<span class="mark" style="background:var(--amber)"></span>');
+    if(daysWithTasks.has(key)) marks.push('<span class="mark" style="background:var(--sage)"></span>');
+    if(daysWithReminders.has(key)) marks.push('<span class="mark" style="background:var(--terracotta)"></span>');
     cell.innerHTML = `<span class="num">${d}</span><div class="marks">${marks.join('')}</div>`;
     cell.onclick = ()=>openDayModal(key, dateObj);
     grid.appendChild(cell);
@@ -1202,10 +1720,8 @@ async function openDayModal(key, dateObj){
   const overlay = document.getElementById('day-modal-overlay');
   const box = document.getElementById('day-modal-box');
   const events = await sget('events:'+key) || [];
-  const dow = dateObj.getDay();
-  const fixed = [];
-  if(dow===0) fixed.push('Talmud Torah · 10h–12h30', 'Faire le pain');
-  if(dow===6) fixed.push('Laver le linge (soir)');
+  const dayTasks = await sget('tasks:'+key) || [];
+  const reminders = await sget('reminders:'+key) || [];
 
   box.innerHTML = `
     <div class="drag-handle"></div>
@@ -1213,16 +1729,34 @@ async function openDayModal(key, dateObj){
       <h3 class="modal-title">${fmtDateFull(dateObj)}</h3>
       <button class="modal-close" id="modal-close-btn" aria-label="Fermer">${ICON.close}</button>
     </div>
-    ${fixed.length? `<div class="fixed-events">${fixed.join(' · ')}</div>` : ''}
+
+    <div class="day-section-label">${ICON.star} Événements importants</div>
     <div id="evt-rows"></div>
-    <div class="add-row" style="margin-top:10px;">
-      <input type="text" id="evt-input" placeholder="Ajouter un événement, un rdv...">
+    <div class="add-row" style="margin-top:8px;">
+      <input type="text" id="evt-input" placeholder="Anniversaire, fête, rdv marquant...">
       <button class="btn" id="evt-add">Ajouter</button>
+    </div>
+
+    <div class="day-section-label" style="margin-top:20px;">${ICON.checkXs} Tâches à faire ce jour</div>
+    <div id="task-rows"></div>
+    <div class="add-row" style="margin-top:8px;">
+      <input type="text" id="daytask-input" placeholder="Ex: appeler le médecin, courses...">
+      <button class="btn" id="daytask-add">Ajouter</button>
+    </div>
+
+    <div class="day-section-label" style="margin-top:20px;">${ICON.warn} Rappels / échéances</div>
+    <div id="rem-rows"></div>
+    <div class="add-row" style="margin-top:8px;">
+      <input type="text" id="rem-input" placeholder="Ex: résilier abonnement Uber...">
+      <button class="btn" id="rem-add">Ajouter</button>
     </div>`;
 
   renderEventRows(events, key, dateObj);
+  renderDayTaskRows(dayTasks, key);
+  renderReminderRows(reminders, key);
 
   box.querySelector('#modal-close-btn').onclick = closeDayModal;
+
   box.querySelector('#evt-add').onclick = async ()=>{
     const inp = box.querySelector('#evt-input');
     const text = inp.value.trim();
@@ -1236,8 +1770,70 @@ async function openDayModal(key, dateObj){
   };
   box.querySelector('#evt-input').addEventListener('keydown', e=>{ if(e.key==='Enter') box.querySelector('#evt-add').click(); });
 
+  box.querySelector('#daytask-add').onclick = async ()=>{
+    const inp = box.querySelector('#daytask-input');
+    const text = inp.value.trim();
+    if(!text) return;
+    dayTasks.push({id:uid(), text, done:false});
+    await sset('tasks:'+key, dayTasks);
+    inp.value='';
+    renderDayTaskRows(dayTasks, key);
+    renderCalendar();
+    if(key===todayKey()){ tasks = dayTasks; renderTasks(); }
+  };
+  box.querySelector('#daytask-input').addEventListener('keydown', e=>{ if(e.key==='Enter') box.querySelector('#daytask-add').click(); });
+
+  box.querySelector('#rem-add').onclick = async ()=>{
+    const inp = box.querySelector('#rem-input');
+    const text = inp.value.trim();
+    if(!text) return;
+    reminders.push({id:uid(), text, done:false});
+    await sset('reminders:'+key, reminders);
+    inp.value='';
+    renderReminderRows(reminders, key);
+    renderCalendar();
+    renderTodayReminders();
+  };
+  box.querySelector('#rem-input').addEventListener('keydown', e=>{ if(e.key==='Enter') box.querySelector('#rem-add').click(); });
+
   showDrawer();
   overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
+}
+
+function renderDayTaskRows(dayTasks, key){
+  const rows = document.getElementById('task-rows');
+  if(!rows) return;
+  rows.innerHTML = dayTasks.length ? dayTasks.map(t=>`<div class="evt-edit-row"><input type="text" value="${(t.text||'').replace(/"/g,'&quot;')}" data-tkid="${t.id}"><button class="habit-del" style="visibility:visible" data-tkdel="${t.id}">${ICON.close}</button></div>`).join('') : '<div class="empty-state">Aucune tâche pour ce jour.</div>';
+  rows.querySelectorAll('input[data-tkid]').forEach(inp=>{
+    inp.onchange = async ()=>{
+      const t = dayTasks.find(x=>x.id===inp.dataset.tkid);
+      if(t){ t.text = inp.value; await sset('tasks:'+key, dayTasks); if(key===todayKey()){ tasks = dayTasks; renderTasks(); } }
+    };
+  });
+  rows.querySelectorAll('[data-tkdel]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const idx = dayTasks.findIndex(x=>x.id===btn.dataset.tkdel);
+      if(idx>=0){ dayTasks.splice(idx,1); await sset('tasks:'+key, dayTasks); renderDayTaskRows(dayTasks, key); renderCalendar(); if(key===todayKey()){ tasks = dayTasks; renderTasks(); } }
+    };
+  });
+}
+
+function renderReminderRows(reminders, key){
+  const rows = document.getElementById('rem-rows');
+  if(!rows) return;
+  rows.innerHTML = reminders.length ? reminders.map(r=>`<div class="evt-edit-row"><input type="text" value="${(r.text||'').replace(/"/g,'&quot;')}" data-rmid="${r.id}"><button class="habit-del" style="visibility:visible" data-rmdel="${r.id}">${ICON.close}</button></div>`).join('') : '<div class="empty-state">Aucun rappel.</div>';
+  rows.querySelectorAll('input[data-rmid]').forEach(inp=>{
+    inp.onchange = async ()=>{
+      const r = reminders.find(x=>x.id===inp.dataset.rmid);
+      if(r){ r.text = inp.value; await sset('reminders:'+key, reminders); }
+    };
+  });
+  rows.querySelectorAll('[data-rmdel]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const idx = reminders.findIndex(x=>x.id===btn.dataset.rmdel);
+      if(idx>=0){ reminders.splice(idx,1); await sset('reminders:'+key, reminders); renderReminderRows(reminders, key); renderCalendar(); renderTodayReminders(); }
+    };
+  });
 }
 
 function renderEventRows(events, key, dateObj){
