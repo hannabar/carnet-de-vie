@@ -101,6 +101,14 @@ html, body{ max-width:100%; overflow-x:hidden; }
 
 /* ADD ROW */
 .quote-card{ display:flex; align-items:flex-start; gap:10px; background:var(--bg-card); border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:12px; padding:13px 15px; margin-bottom:16px; }
+.day-nav{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:14px; }
+.day-nav-arrow{ width:38px; height:38px; flex:none; display:flex; align-items:center; justify-content:center; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; font-size:22px; color:var(--indigo-deep); cursor:pointer; -webkit-tap-highlight-color:transparent; line-height:1; }
+.day-nav-arrow:active{ transform:scale(0.92); }
+.day-nav-arrow.disabled{ opacity:.3; pointer-events:none; }
+.day-nav-center{ flex:1; text-align:center; }
+.day-nav-label{ font-family:'Fraunces',serif; font-size:15px; font-weight:600; color:var(--indigo-deep); text-transform:capitalize; }
+.day-nav-label.past{ color:var(--amber); }
+.day-nav-back{ background:none; border:none; font-size:11px; color:var(--ink-soft); cursor:pointer; text-decoration:underline; margin-top:2px; -webkit-tap-highlight-color:transparent; }
 .meal-cat-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:14px; }
 .meal-cat-card{ display:flex; flex-direction:column; align-items:center; gap:6px; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:20px 12px; cursor:pointer; transition:all .15s; -webkit-tap-highlight-color:transparent; }
 .meal-cat-card:active{ transform:scale(0.96); }
@@ -449,6 +457,7 @@ html, body{ max-width:100%; overflow-x:hidden; }
 
   <!-- TODAY -->
   <div class="view active" id="view-today">
+    <div id="day-nav" class="day-nav"></div>
     <div id="daily-quote"></div>
     <div id="today-events"></div>
     <div id="today-reminders"></div>
@@ -923,6 +932,9 @@ let weekLog = {};
 let tasks = [];
 let calMonth = new Date();
 let selectedCalDate = null;
+let viewDate = new Date();  // jour actuellement affiché sur l'écran Aujourd'hui
+function viewKey(){ return todayKey(viewDate); }
+function isViewingToday(){ return viewKey() === todayKey(); }
 
 async function init(){
   document.getElementById('today-date').textContent = fmtDateFull(new Date());
@@ -980,7 +992,7 @@ function localEpilRef(){
 async function renderTodayEvents(){
   const el = document.getElementById('today-events');
   if(!el) return;
-  const events = await sget('events:'+todayKey()) || [];
+  const events = await sget('events:'+viewKey()) || [];
   const all = events.map(e=>({text:e.text}));
   if(!all.length){ el.innerHTML = ''; return; }
   el.innerHTML = `<div class="today-events-card">
@@ -992,7 +1004,7 @@ async function renderTodayEvents(){
 async function renderTodayReminders(){
   const el = document.getElementById('today-reminders');
   if(!el) return;
-  const reminders = (await sget('reminders:'+todayKey()) || []).filter(r=>!r.done);
+  const reminders = (await sget('reminders:'+viewKey()) || []).filter(r=>!r.done);
   if(!reminders.length){ el.innerHTML = ''; return; }
   el.innerHTML = `<button class="today-warn-btn" id="today-warn-btn">
     ${ICON.warn}
@@ -1033,7 +1045,48 @@ function openRemindersDrawer(reminders){
   overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
 }
 
+async function renderDayNav(){
+  const el = document.getElementById('day-nav');
+  if(!el) return;
+  const isToday = isViewingToday();
+  const label = viewDate.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+  const canForward = !isToday;
+  el.innerHTML = `
+    <button class="day-nav-arrow" id="day-prev" aria-label="Jour précédent">‹</button>
+    <div class="day-nav-center">
+      <div class="day-nav-label ${isToday?'':'past'}">${isToday? "Aujourd'hui" : label}</div>
+      ${!isToday? `<button class="day-nav-back" id="day-back">revenir à aujourd'hui</button>` : ''}
+    </div>
+    <button class="day-nav-arrow ${canForward?'':'disabled'}" id="day-next" aria-label="Jour suivant" ${canForward?'':'disabled'}>›</button>`;
+  el.querySelector('#day-prev').onclick = ()=>changeViewDay(-1);
+  const nextBtn = el.querySelector('#day-next');
+  if(canForward) nextBtn.onclick = ()=>changeViewDay(1);
+  const backBtn = el.querySelector('#day-back');
+  if(backBtn) backBtn.onclick = ()=>goToToday();
+}
+
+async function changeViewDay(delta){
+  const d = new Date(viewDate); d.setDate(d.getDate()+delta);
+  const todayD = new Date(); todayD.setHours(0,0,0,0);
+  const cmp = new Date(d); cmp.setHours(0,0,0,0);
+  if(cmp > todayD) return; // pas de futur
+  viewDate = d;
+  await reloadViewDay();
+}
+
+async function goToToday(){
+  viewDate = new Date();
+  await reloadViewDay();
+}
+
+async function reloadViewDay(){
+  todayLog = await sget('habitlog:'+viewKey()) || {};
+  tasks = await sget('tasks:'+viewKey()) || [];
+  renderToday();
+}
+
 async function renderToday(){
+  renderDayNav();
   const q = document.getElementById('daily-quote');
   if(q) q.innerHTML = `<div class="quote-card">${ICON.quote}<span class="quote-text">${quoteOfDay()}</span></div>`;
   renderTodayEvents();
@@ -1044,7 +1097,7 @@ async function renderToday(){
   const groupsEl = document.getElementById('habit-groups');
   groupsEl.innerHTML = '';
 
-  const dow = new Date().getDay();
+  const dow = viewDate.getDay();
   const applicable = habits.filter(h=>{
     if(h.type==='weekday') return h.day===dow;
     return true;
@@ -1084,7 +1137,7 @@ async function renderToday(){
           if(h.id==='epilation' && todayLog[h.id]){
             await sset('epilation-ref', todayKey());
           }
-          await sset('habitlog:'+todayKey(), todayLog);
+          await sset('habitlog:'+viewKey(), todayLog);
           renderToday();
         };
         totalCount++; if(isDone) doneCount++;
@@ -1098,8 +1151,8 @@ async function renderToday(){
           <button class="habit-del" data-del="${h.id}">${ICON.close}</button>`;
         const chk = row.querySelector('.habit-check');
         const inp = row.querySelector('.habit-text-input');
-        chk.onclick = async ()=>{ todayLog[h.id] = !todayLog[h.id]; await sset('habitlog:'+todayKey(), todayLog); renderToday(); };
-        inp.onchange = async (e)=>{ todayLog[h.id+'_text']=e.target.value; todayLog[h.id]=!!e.target.value; await sset('habitlog:'+todayKey(), todayLog); renderToday(); };
+        chk.onclick = async ()=>{ todayLog[h.id] = !todayLog[h.id]; await sset('habitlog:'+viewKey(), todayLog); renderToday(); };
+        inp.onchange = async (e)=>{ todayLog[h.id+'_text']=e.target.value; todayLog[h.id]=!!e.target.value; await sset('habitlog:'+viewKey(), todayLog); renderToday(); };
       } else {
         row.innerHTML = `<div class="habit-check ${isDone?'done':''}">${isDone?ICON.check:''}</div>
           <div><div class="habit-name ${isDone?'done':''}">${h.name}</div>${h.sub?`<div class="habit-sub">${h.sub}</div>`:''}</div>
@@ -1147,7 +1200,7 @@ async function renderToday(){
     cures.forEach(cure=>{
       cureBox.querySelector(`[data-curecheck="${cure.id}"]`).onclick = async ()=>{
         todayLog[cure.id] = !todayLog[cure.id];
-        await sset('habitlog:'+todayKey(), todayLog);
+        await sset('habitlog:'+viewKey(), todayLog);
         renderToday();
       };
       cureBox.querySelector(`[data-curedel="${cure.id}"]`).onclick = async ()=>{
@@ -1174,22 +1227,22 @@ function renderTasks(){
       <div class="task-text ${t.done?'done':''}">${t.text}</div>
       ${t.done?'':`<button class="task-tomorrow" data-ttom="${t.id}" title="Reporter à demain" aria-label="Reporter à demain">${ICON.tomorrow}</button>`}
       <button class="habit-del" style="visibility:visible;" data-tdel="${t.id}">${ICON.close}</button>`;
-    row.querySelector('.task-check').onclick = async ()=>{ t.done=!t.done; await sset('tasks:'+todayKey(), tasks); renderTasks(); };
+    row.querySelector('.task-check').onclick = async ()=>{ t.done=!t.done; await sset('tasks:'+viewKey(), tasks); renderTasks(); };
     const tomBtn = row.querySelector('[data-ttom]');
     if(tomBtn) tomBtn.onclick = async ()=>{ await moveTaskToTomorrow(t); };
-    row.querySelector('[data-tdel]').onclick = async ()=>{ tasks = tasks.filter(x=>x.id!==t.id); await sset('tasks:'+todayKey(), tasks); renderTasks(); };
+    row.querySelector('[data-tdel]').onclick = async ()=>{ tasks = tasks.filter(x=>x.id!==t.id); await sset('tasks:'+viewKey(), tasks); renderTasks(); };
     list.appendChild(row);
   });
 }
 
 async function moveTaskToTomorrow(t){
-  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrow = new Date(viewDate); tomorrow.setDate(tomorrow.getDate()+1);
   const tkey = todayKey(tomorrow);
   const tomTasks = await sget('tasks:'+tkey) || [];
   tomTasks.push({ id:uid(), text:t.text, done:false });
   await sset('tasks:'+tkey, tomTasks);
   tasks = tasks.filter(x=>x.id!==t.id);
-  await sset('tasks:'+todayKey(), tasks);
+  await sset('tasks:'+viewKey(), tasks);
   renderTasks();
   if(typeof renderCalendar==='function') renderCalendar();
 }
@@ -1215,7 +1268,7 @@ function bindStaticEvents(){
     const text = inp.value.trim();
     if(!text) return;
     tasks.push({id:uid(), text, done:false});
-    await sset('tasks:'+todayKey(), tasks);
+    await sset('tasks:'+viewKey(), tasks);
     inp.value='';
     renderTasks();
   };
@@ -1977,6 +2030,7 @@ function bindTabs(){
       t.classList.add('active');
       document.getElementById('view-'+t.dataset.tab).classList.add('active');
       if(t.dataset.tab === 'bilan') renderBilan();
+      if(t.dataset.tab === 'today'){ viewDate = new Date(); reloadViewDay(); }
       if(t.dataset.tab === 'repas'){ currentMealCat = null; renderRepas(); }
       if(t.dataset.tab === 'sport'){ currentSportCat = null; renderSport(); }
       if(t.dataset.tab === 'courses'){ currentCourseCat = null; renderCourses(); }
@@ -2033,38 +2087,6 @@ async function renderCalendar(){
   }
 }
 
-async function renderDayHabits(key, dateObj){
-  const rows = document.getElementById('day-habits-rows');
-  if(!rows) return;
-  const dow = dateObj.getDay();
-  const log = await sget('habitlog:'+key) || {};
-  // habitudes applicables ce jour (quotidiennes + celles du bon jour de semaine), hors cures
-  const applicable = habits.filter(h=>{
-    if(h.type==='cure') return false;
-    if(h.type==='weekday') return h.day===dow;
-    return true;
-  });
-  if(!applicable.length){ rows.innerHTML = '<div class="empty-state">Aucune habitude ce jour.</div>'; return; }
-  rows.innerHTML = applicable.map(h=>{
-    const done = !!log[h.id];
-    return `<div class="habit-row" style="border:none;">
-      <div class="habit-check ${done?'done':''}" data-dhab="${h.id}">${done?ICON.check:''}</div>
-      <div style="flex:1"><div class="habit-name ${done?'done':''}">${h.name}</div></div>
-    </div>`;
-  }).join('');
-  rows.querySelectorAll('[data-dhab]').forEach(el=>{
-    el.onclick = async ()=>{
-      const id = el.dataset.dhab;
-      const curLog = await sget('habitlog:'+key) || {};
-      curLog[id] = !curLog[id];
-      await sset('habitlog:'+key, curLog);
-      renderDayHabits(key, dateObj);
-      if(key===todayKey()) renderToday();
-      renderCalendar();
-    };
-  });
-}
-
 async function openDayModal(key, dateObj){
   selectedCalDate = {key, date:dateObj};
   const overlay = document.getElementById('day-modal-overlay');
@@ -2099,15 +2121,11 @@ async function openDayModal(key, dateObj){
     <div class="add-row" style="margin-top:8px;">
       <input type="text" id="rem-input" placeholder="Ex: résilier abonnement Uber...">
       <button class="btn" id="rem-add">Ajouter</button>
-    </div>
-
-    <div class="day-section-label" style="margin-top:20px;">${ICON.checkPad} Habitudes de ce jour</div>
-    <div id="day-habits-rows"></div>`;
+    </div>`;
 
   renderEventRows(events, key, dateObj);
   renderDayTaskRows(dayTasks, key);
   renderReminderRows(reminders, key);
-  renderDayHabits(key, dateObj);
 
   box.querySelector('#modal-close-btn').onclick = closeDayModal;
 
