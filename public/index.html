@@ -192,6 +192,26 @@ html, body{ max-width:100%; overflow-x:hidden; }
 .course-row.urgent .task-text{ font-weight:600; color:var(--indigo-deep); }
 .course-cat-head{ display:flex; align-items:center; gap:8px; font-family:'Fraunces',serif; font-size:16px; font-weight:600; color:var(--indigo-deep); margin-bottom:8px; }
 .course-cat-head svg{ color:var(--amber); }
+.course-cat-total{ margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; color:var(--amber); }
+.course-price-tag{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); flex:none; }
+.fin-summary-card{ background:linear-gradient(135deg, var(--indigo-deep), #2A3355); color:#fff; border:none; }
+.fin-month-label{ font-size:12px; opacity:.75; text-transform:uppercase; letter-spacing:.05em; }
+.fin-balance{ font-family:'Fraunces',serif; font-size:38px; font-weight:600; line-height:1.1; margin-top:4px; }
+.fin-balance-sub{ font-size:12px; opacity:.7; margin-bottom:14px; }
+.fin-summary-row{ display:flex; gap:12px; }
+.fin-summary-item{ flex:1; background:rgba(255,255,255,0.1); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; gap:2px; }
+.fin-sum-label{ font-size:11px; opacity:.75; }
+.fin-sum-val{ font-family:'IBM Plex Mono',monospace; font-size:16px; font-weight:600; }
+.fin-sum-val.income{ color:#A8D5A2; }
+.fin-sum-val.expense{ color:#E8A99B; }
+.fin-sub-label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:6px; }
+.fin-cat-block{ margin-bottom:12px; }
+.fin-cat-head{ display:flex; justify-content:space-between; align-items:center; font-weight:600; font-size:14px; color:var(--indigo-deep); padding-bottom:4px; border-bottom:1px solid var(--line); }
+.fin-cat-total{ font-family:'IBM Plex Mono',monospace; color:var(--amber); }
+.fin-exp-row{ display:flex; align-items:center; gap:8px; padding:5px 0 5px 8px; font-size:13px; }
+.fin-exp-row.auto{ color:var(--ink-soft); font-style:italic; }
+.fin-exp-lbl{ flex:1; }
+.fin-exp-amt{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink); }
 .course-star{ background:none; border:none; color:var(--ink-faint); cursor:pointer; padding:2px 4px; flex:none; display:inline-flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; }
 .course-star.on{ color:var(--amber); }
 .course-star:active{ transform:scale(0.85); }
@@ -593,46 +613,59 @@ html, body{ max-width:100%; overflow-x:hidden; }
 
   <!-- FINANCE -->
   <div class="view" id="view-finance">
+    <div class="card fin-summary-card">
+      <div id="fin-month-label" class="fin-month-label">Ce mois-ci</div>
+      <div class="fin-balance" id="fin-balance">0 €</div>
+      <div class="fin-balance-sub">reste ce mois-ci</div>
+      <div class="fin-summary-row">
+        <div class="fin-summary-item"><span class="fin-sum-label">Revenus</span><span class="fin-sum-val income" id="fin-total-income">0 €</span></div>
+        <div class="fin-summary-item"><span class="fin-sum-label">Dépenses</span><span class="fin-sum-val expense" id="fin-total-expense">0 €</span></div>
+      </div>
+    </div>
+
     <div class="card">
-      <div class="card-title"><span>Objectif annuel · 10 000 €</span></div>
+      <div class="card-title"><span>Objectif épargne · 10 000 €</span></div>
       <div class="progress-outer"><div class="progress-inner" id="fin-progress-bar" style="width:0%"></div></div>
       <div class="progress-label"><span id="fin-progress-amount">0 €</span><span id="fin-progress-pct">0%</span></div>
     </div>
-    <div class="card">
-      <div class="card-title">
-        <span id="fin-month-label">Ce mois-ci</span>
-      </div>
-      <div class="fin-grid">
-        <div class="fin-field"><label>Budget shopping</label><input type="text" inputmode="decimal" id="fin-shopping" placeholder="0"></div>
-        <div class="fin-field"><label>Budget cadeaux</label><input type="text" inputmode="decimal" id="fin-cadeaux" placeholder="0"></div>
-        <div class="fin-field"><label>Budget chambre</label><input type="text" inputmode="decimal" id="fin-chambre" placeholder="0"></div>
-      </div>
-    </div>
+
     <div class="card">
       <div class="card-title"><span>Revenus du mois</span></div>
+      <div class="fin-field" style="margin-bottom:10px;">
+        <label>Revenu fixe mensuel</label>
+        <input type="text" inputmode="decimal" id="fin-fixed" placeholder="0">
+      </div>
+      <div class="fin-sub-label">Revenus variables (par-ci par-là)</div>
       <div id="fin-income-list"></div>
       <div class="add-row">
-        <input type="text" id="fin-income-label" placeholder="Source (ex: NSI, cours particuliers)" style="flex:2;">
-        <input type="text" inputmode="decimal" id="fin-income-amount" placeholder="Montant" style="flex:1;">
-        <button class="btn btn-small" id="fin-income-add">Ajouter</button>
+        <input type="text" id="fin-income-label" placeholder="Source (ex: cours donné)" style="flex:2;">
+        <input type="text" inputmode="decimal" id="fin-income-amount" placeholder="€" style="flex:1; max-width:70px;">
+        <button class="btn btn-small" id="fin-income-add">+</button>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-title"><span>Dépenses du mois</span></div>
+      <div id="fin-expense-cats"></div>
+      <div class="fin-sub-label" style="margin-top:14px;">Ajouter une dépense</div>
+      <div class="add-row">
+        <input type="text" id="fin-exp-label" placeholder="Quoi ? (ex: pilates)" style="flex:2;">
+        <input type="text" inputmode="decimal" id="fin-exp-amount" placeholder="€" style="flex:1; max-width:60px;">
+      </div>
+      <div class="add-row" style="margin-top:6px;">
+        <select id="fin-exp-cat" style="flex:1;"></select>
+        <button class="btn btn-small" id="fin-exp-add">Ajouter</button>
+      </div>
+      <p style="font-size:11px; color:var(--ink-soft); margin:8px 0 0;">💡 Les courses avec prix et les envies achetées s'ajoutent ici automatiquement.</p>
+    </div>
+
     <div class="card">
       <div class="card-title"><span>Épargne ce mois</span></div>
       <div id="fin-savings-list"></div>
       <div class="add-row">
         <input type="text" id="fin-save-label" placeholder="Origine (optionnel)" style="flex:2;">
-        <input type="text" inputmode="decimal" id="fin-save-amount" placeholder="Montant" style="flex:1;">
-        <button class="btn btn-small" id="fin-save-add">Ajouter</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><span>Dépenses importantes</span></div>
-      <div id="fin-expenses-list"></div>
-      <div class="add-row">
-        <input type="text" id="fin-exp-label" placeholder="Libellé (ex: études)" style="flex:2;">
-        <input type="text" inputmode="decimal" id="fin-exp-amount" placeholder="Montant" style="flex:1;">
-        <button class="btn btn-small" id="fin-exp-add">Ajouter</button>
+        <input type="text" inputmode="decimal" id="fin-save-amount" placeholder="€" style="flex:1; max-width:70px;">
+        <button class="btn btn-small" id="fin-save-add">+</button>
       </div>
     </div>
   </div>
@@ -1194,9 +1227,7 @@ function bindStaticEvents(){
   document.getElementById('cal-prev').onclick = ()=>{ calMonth.setMonth(calMonth.getMonth()-1); renderCalendar(); };
   document.getElementById('cal-next').onclick = ()=>{ calMonth.setMonth(calMonth.getMonth()+1); renderCalendar(); };
 
-  document.getElementById('fin-shopping').onchange = saveFinance;
-  document.getElementById('fin-cadeaux').onchange = saveFinance;
-  document.getElementById('fin-chambre').onchange = saveFinance;
+  document.getElementById('fin-fixed').onchange = saveFinance;
   document.getElementById('fin-exp-add').onclick = addExpense;
   document.getElementById('fin-save-add').onclick = addSaving;
   document.getElementById('fin-income-add').onclick = addIncome;
@@ -1361,7 +1392,7 @@ async function renderBilan(){
 
 /* ===== MENU / IDÉES REPAS ===== */
 let meals = [];
-const MEAL_CATS = ['Petit déj','Boisson','Soupe','Salade','Entrée','Plat','Goûter','Dessert','Gâteau'];
+const MEAL_CATS = ['Petit déj','Boisson','Soupe','Salade','Entrée','Plat','Sauces','Goûter','Dessert','Gâteau'];
 const MEAL_CAT_ICON = {
   'Petit déj': SVG('<path d="M5 8h11v3a5.5 5.5 0 0 1-11 0z"/><path d="M16 8h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M6 3l1 2M10 3l1 2M14 3l1 2"/>', 26, 1.5),
   'Boisson':   SVG('<path d="M6 3h12l-1.2 16a1.5 1.5 0 0 1-1.5 1.4H8.7a1.5 1.5 0 0 1-1.5-1.4z"/><path d="M6.4 8h11.2"/><path d="M12 3v3"/>', 26, 1.6),
@@ -1369,6 +1400,7 @@ const MEAL_CAT_ICON = {
   'Salade':  SVG('<path d="M4 10h16a2 2 0 0 1-2 6H6a2 2 0 0 1-2-6z"/><path d="M12 10c-1-3-4-4-6-3 1 3 4 4 6 3zM12 10c1-2.5 3.5-3 5.5-2-1 2.5-3.5 3-5.5 2z"/>', 26, 1.6),
   'Entrée':  SVG('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>', 26, 1.6),
   'Plat':    SVG('<path d="M3 11h18M12 11V3M12 3a4 4 0 0 0-4 4c0 2 1.5 3 4 4M12 3a4 4 0 0 1 4 4c0 2-1.5 3-4 4"/><path d="M5 11a7 7 0 0 0 14 0"/>', 26, 1.5),
+  'Sauces':  SVG('<path d="M8 2h5l1 3H7zM7 5h7l1 4a3 3 0 0 1-3 3h-3a3 3 0 0 1-3-3zM10 12v4a2 2 0 0 0 2 2h4a2 2 0 0 1 2 2"/>', 26, 1.5),
   'Goûter':  SVG('<path d="M5 8h11v3a5.5 5.5 0 0 1-11 0z"/><path d="M16 8h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M7 4c0 .8-.5 1-.5 1.8M10 4c0 .8-.5 1-.5 1.8M13 4c0 .8-.5 1-.5 1.8"/>', 26, 1.5),
   'Dessert': SVG('<path d="M6 14h12l-1 6a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"/><path d="M6 14a6 6 0 0 1 12 0"/><circle cx="12" cy="5" r="1.4"/><path d="M12 6.5V8"/>', 26, 1.5),
   'Gâteau':  SVG('<path d="M4 21h16M5 21v-8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8M4 15h16M12 6V3M12 3l-1.5 1.5M12 3l1.5 1.5"/>', 26, 1.5)
@@ -1744,25 +1776,32 @@ async function renderCourses(){
     <div class="card">
       <div class="card-title"><span>Mes courses</span></div>
       <div class="add-row" style="margin-top:6px;">
-        <input type="text" id="course-input" placeholder="Ajouter un article...">
-        <select id="course-cat-sel">${COURSE_CATS.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
-        <button class="btn" id="course-add">+</button>
+        <input type="text" id="course-input" placeholder="Article...">
+        <input type="text" id="course-price" inputmode="decimal" placeholder="Prix €" style="max-width:80px;">
+      </div>
+      <div class="add-row" style="margin-top:6px;">
+        <select id="course-cat-sel" style="flex:1;">${COURSE_CATS.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
+        <button class="btn" id="course-add">Ajouter</button>
       </div>
     </div>`;
 
   if(nonEmpty.length){
-    html += nonEmpty.map(cat=>`
+    html += nonEmpty.map(cat=>{
+      const catTotal = groups[cat].reduce((s,c)=>s+parseAmount(c.price), 0);
+      return `
       <div class="card">
-        <div class="course-cat-head">${COURSE_CAT_ICON[cat]} ${cat}</div>
+        <div class="course-cat-head">${COURSE_CAT_ICON[cat]} ${cat}${catTotal>0?`<span class="course-cat-total">${catTotal.toFixed(2)} €</span>`:''}</div>
         <div>${groups[cat].map(c=>courseRow(c)).join('')}</div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   } else if(!bought.length){
     html += '<div class="card"><div class="empty-state">Aucun article à acheter. Ajoute-en un ci-dessus.</div></div>';
   }
 
   if(bought.length){
+    const boughtTotal = bought.reduce((s,c)=>s+parseAmount(c.price), 0);
     html += `<div class="card">
-      <div class="course-cat-head" style="color:var(--ink-soft);">Acheté (${bought.length})</div>
+      <div class="course-cat-head" style="color:var(--ink-soft);">Acheté (${bought.length})${boughtTotal>0?`<span class="course-cat-total">${boughtTotal.toFixed(2)} €</span>`:''}</div>
       <div>${bought.map(c=>courseRow(c)).join('')}</div>
     </div>`;
   }
@@ -1774,22 +1813,26 @@ async function renderCourses(){
     const text = inp.value.trim();
     if(!text) return;
     const cat = wrap.querySelector('#course-cat-sel').value;
-    courses.push({ id:uid(), text, cat, done:false, urgent:false });
+    const price = wrap.querySelector('#course-price').value.trim();
+    courses.push({ id:uid(), text, cat, price, done:false, urgent:false });
     await sset('courses', courses);
-    inp.value='';
+    inp.value=''; wrap.querySelector('#course-price').value='';
     renderCourses();
   };
   wrap.querySelector('#course-add').onclick = addFn;
   wrap.querySelector('#course-input').addEventListener('keydown', e=>{ if(e.key==='Enter') addFn(); });
+  wrap.querySelector('#course-price').addEventListener('keydown', e=>{ if(e.key==='Enter') addFn(); });
   bindCourseRows(wrap);
 }
 
 function courseCatOf(c){ return COURSE_CATS.includes(c.cat) ? c.cat : 'Autre'; }
 
 function courseRow(c){
+  const priceTag = parseAmount(c.price)>0 ? `<span class="course-price-tag">${parseAmount(c.price).toFixed(2)} €</span>` : '';
   return `<div class="course-row ${c.done?'done':''} ${c.urgent&&!c.done?'urgent':''}">
     <div class="task-check ${c.done?'done':''}" data-cchk="${c.id}">${c.done?ICON.checkXs:''}</div>
     <div class="task-text ${c.done?'done':''}">${c.text}</div>
+    ${priceTag}
     ${!c.done ? `<button class="course-star ${c.urgent?'on':''}" data-cstar="${c.id}" aria-label="Marquer urgent">${c.urgent?ICON.starOn:ICON.star}</button>` : ''}
     <button class="habit-del" style="visibility:visible;" data-cdel2="${c.id}">${ICON.close}</button>
   </div>`;
@@ -1990,6 +2033,38 @@ async function renderCalendar(){
   }
 }
 
+async function renderDayHabits(key, dateObj){
+  const rows = document.getElementById('day-habits-rows');
+  if(!rows) return;
+  const dow = dateObj.getDay();
+  const log = await sget('habitlog:'+key) || {};
+  // habitudes applicables ce jour (quotidiennes + celles du bon jour de semaine), hors cures
+  const applicable = habits.filter(h=>{
+    if(h.type==='cure') return false;
+    if(h.type==='weekday') return h.day===dow;
+    return true;
+  });
+  if(!applicable.length){ rows.innerHTML = '<div class="empty-state">Aucune habitude ce jour.</div>'; return; }
+  rows.innerHTML = applicable.map(h=>{
+    const done = !!log[h.id];
+    return `<div class="habit-row" style="border:none;">
+      <div class="habit-check ${done?'done':''}" data-dhab="${h.id}">${done?ICON.check:''}</div>
+      <div style="flex:1"><div class="habit-name ${done?'done':''}">${h.name}</div></div>
+    </div>`;
+  }).join('');
+  rows.querySelectorAll('[data-dhab]').forEach(el=>{
+    el.onclick = async ()=>{
+      const id = el.dataset.dhab;
+      const curLog = await sget('habitlog:'+key) || {};
+      curLog[id] = !curLog[id];
+      await sset('habitlog:'+key, curLog);
+      renderDayHabits(key, dateObj);
+      if(key===todayKey()) renderToday();
+      renderCalendar();
+    };
+  });
+}
+
 async function openDayModal(key, dateObj){
   selectedCalDate = {key, date:dateObj};
   const overlay = document.getElementById('day-modal-overlay');
@@ -2024,11 +2099,15 @@ async function openDayModal(key, dateObj){
     <div class="add-row" style="margin-top:8px;">
       <input type="text" id="rem-input" placeholder="Ex: résilier abonnement Uber...">
       <button class="btn" id="rem-add">Ajouter</button>
-    </div>`;
+    </div>
+
+    <div class="day-section-label" style="margin-top:20px;">${ICON.checkPad} Habitudes de ce jour</div>
+    <div id="day-habits-rows"></div>`;
 
   renderEventRows(events, key, dateObj);
   renderDayTaskRows(dayTasks, key);
   renderReminderRows(reminders, key);
+  renderDayHabits(key, dateObj);
 
   box.querySelector('#modal-close-btn').onclick = closeDayModal;
 
@@ -2154,7 +2233,7 @@ function openSettingsDrawer(){
     </div>
     <div class="settings-foot">Mon carnet de vie</div>`;
   box.querySelector('#modal-close-btn').onclick = closeDayModal;
-  box.querySelector('#set-change-pin').onclick = ()=>{ closeDayModal(); setTimeout(()=>lockApp('create'), 260); };
+  box.querySelector('#set-change-pin').onclick = ()=>{ closeDayModal(); setTimeout(()=>lockApp('verify-old'), 260); };
   box.querySelector('#set-lock').onclick = ()=>{ closeDayModal(); setTimeout(()=>lockApp('unlock'), 260); };
   showDrawer();
   overlay.onclick = (e)=>{ if(e.target===overlay) closeDayModal(); };
@@ -2805,29 +2884,93 @@ function bindProEvents(){
   };
 }
 
+const EXPENSE_CATS = ['Alimentaire','Hygiène','Shopping','Envie','Cadeau','Extrascolaire','Étude','Loisir','Abonnement','Transport','Santé','Sport','Soin/beauté','Sorties','Voyage/vacances','Épargne','Dons/tsedaka','Autre'];
+
+// Calcule les dépenses automatiques (courses achetées + envies achetées) pour le mois courant
+async function autoExpensesThisMonth(){
+  const auto = {};
+  EXPENSE_CATS.forEach(c=>auto[c]=0);
+  // courses achetées avec prix -> catégorie Alimentaire par défaut, sauf mapping
+  const courseCatMap = { 'Alimentaire':'Alimentaire','Vêtements':'Shopping','Accessoires':'Shopping','Chaussures':'Shopping','Pharmacie':'Santé','Soin':'Soin/beauté','Déco':'Autre','Cadeau':'Cadeau','Autre':'Autre' };
+  const allCourses = await sget('courses') || [];
+  allCourses.forEach(c=>{
+    if(c.done){
+      const cat = courseCatMap[c.cat] || 'Autre';
+      auto[cat] = (auto[cat]||0) + parseAmount(c.price);
+    }
+  });
+  // envies achetées -> catégorie Envie
+  const allEnvies = await sget('envies') || [];
+  allEnvies.forEach(e=>{
+    if(e.bought) auto['Envie'] = (auto['Envie']||0) + parseAmount(e.price);
+  });
+  return auto;
+}
+
 async function renderFinance(){
   const mk = monthKey();
   const label = new Date().toLocaleDateString('fr-FR',{month:'long', year:'numeric'});
   document.getElementById('fin-month-label').textContent = 'Ce mois-ci · '+label;
-  const data = await sget('finance:'+mk) || {savings:[], income:[], shopping:'', cadeaux:'', chambre:'', expenses:[]};
-  document.getElementById('fin-shopping').value = data.shopping||'';
-  document.getElementById('fin-cadeaux').value = data.cadeaux||'';
-  document.getElementById('fin-chambre').value = data.chambre||'';
-  renderExpenses(data.expenses||[]);
-  renderSavings(data.savings||[]);
-  renderIncome(data.income||[]);
+  const data = await sget('finance:'+mk) || {savings:[], income:[], expenses:[], fixed:''};
 
-  let list = { keys: lsListKeys('finance:') };
-  let total = 0;
-  if(list && list.keys){
-    for(const k of list.keys){
-      const v = await sget(k);
-      if(v && v.savings) total += v.savings.reduce((s,x)=>s+parseAmount(x.amount),0);
-    }
+  // revenu fixe
+  document.getElementById('fin-fixed').value = data.fixed||'';
+
+  // remplir le select des catégories de dépense
+  const sel = document.getElementById('fin-exp-cat');
+  if(sel && !sel.dataset.filled){ sel.innerHTML = EXPENSE_CATS.map(c=>`<option value="${c}">${c}</option>`).join(''); sel.dataset.filled='1'; }
+
+  renderIncome(data.income||[]);
+  renderSavings(data.savings||[]);
+
+  // dépenses manuelles + auto, groupées par catégorie
+  const manual = data.expenses||[];
+  const auto = await autoExpensesThisMonth();
+  const byCat = {};
+  EXPENSE_CATS.forEach(c=>byCat[c]={manual:[], autoTotal:auto[c]||0});
+  manual.forEach(e=>{ const c = EXPENSE_CATS.includes(e.cat)?e.cat:'Autre'; byCat[c].manual.push(e); });
+
+  const catEl = document.getElementById('fin-expense-cats');
+  let totalExpense = 0;
+  const blocks = EXPENSE_CATS.filter(c=>byCat[c].manual.length || byCat[c].autoTotal>0).map(c=>{
+    const manualTotal = byCat[c].manual.reduce((s,e)=>s+parseAmount(e.amount),0);
+    const catTotal = manualTotal + byCat[c].autoTotal;
+    totalExpense += catTotal;
+    const rows = byCat[c].manual.map(e=>`<div class="fin-exp-row"><span class="fin-exp-lbl">${e.label}</span><span class="fin-exp-amt">${parseAmount(e.amount).toFixed(2)} €</span><button class="habit-del" style="visibility:visible" data-xdel="${e.id}">${ICON.close}</button></div>`).join('');
+    const autoRow = byCat[c].autoTotal>0 ? `<div class="fin-exp-row auto"><span class="fin-exp-lbl">Courses & envies (auto)</span><span class="fin-exp-amt">${byCat[c].autoTotal.toFixed(2)} €</span></div>` : '';
+    return `<div class="fin-cat-block">
+      <div class="fin-cat-head"><span>${c}</span><span class="fin-cat-total">${catTotal.toFixed(2)} €</span></div>
+      ${rows}${autoRow}
+    </div>`;
+  });
+  catEl.innerHTML = blocks.length ? blocks.join('') : '<div class="empty-state">Aucune dépense ce mois-ci.</div>';
+  catEl.querySelectorAll('[data-xdel]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const dd = await sget('finance:'+mk) || {expenses:[]};
+      dd.expenses = (dd.expenses||[]).filter(e=>e.id!==btn.dataset.xdel);
+      await sset('finance:'+mk, dd);
+      renderFinance();
+    };
+  });
+
+  // totaux
+  const totalIncome = parseAmount(data.fixed) + (data.income||[]).reduce((s,x)=>s+parseAmount(x.amount),0);
+  const balance = totalIncome - totalExpense;
+  document.getElementById('fin-total-income').textContent = totalIncome.toLocaleString('fr-FR')+' €';
+  document.getElementById('fin-total-expense').textContent = totalExpense.toLocaleString('fr-FR')+' €';
+  const balEl = document.getElementById('fin-balance');
+  balEl.textContent = (balance>=0?'':'−') + Math.abs(balance).toLocaleString('fr-FR')+' €';
+  balEl.style.color = balance>=0 ? 'var(--sage)' : 'var(--terracotta)';
+
+  // objectif épargne (cumul toutes périodes)
+  let totalSaved = 0;
+  for(const k of lsListKeys('finance:')){
+    const v = await sget(k);
+    if(v && v.savings) totalSaved += v.savings.reduce((s,x)=>s+parseAmount(x.amount),0);
   }
-  const pct = Math.min(100, Math.round(total/10000*100));
+  const pct = Math.min(100, Math.round(totalSaved/10000*100));
   document.getElementById('fin-progress-bar').style.width = pct+'%';
-  document.getElementById('fin-progress-amount').textContent = total.toLocaleString('fr-FR')+' € / 10 000 €';
+  document.getElementById('fin-progress-amount').textContent = totalSaved.toLocaleString('fr-FR')+' € / 10 000 €';
   document.getElementById('fin-progress-pct').textContent = pct+'%';
 }
 
@@ -2895,43 +3038,28 @@ async function addIncome(){
   renderFinance();
 }
 
-function renderExpenses(expenses){
-  const list = document.getElementById('fin-expenses-list');
-  if(!expenses.length){ list.innerHTML = '<div class="empty-state">Aucune dépense notée ce mois-ci.</div>'; return; }
-  list.innerHTML = expenses.map(e=>`<div class="habit-row"><div class="habit-name" style="flex:1">${e.label}</div><span class="mono" style="margin-right:8px">${parseAmount(e.amount).toLocaleString('fr-FR')} €</span><button class="habit-del" style="visibility:visible" data-xdel="${e.id}">${ICON.close}</button></div>`).join('');
-  list.querySelectorAll('[data-xdel]').forEach(btn=>{
-    btn.onclick = async ()=>{
-      const mk = monthKey();
-      const data = await sget('finance:'+mk) || {expenses:[]};
-      data.expenses = (data.expenses||[]).filter(e=>e.id!==btn.dataset.xdel);
-      await sset('finance:'+mk, data);
-      renderFinance();
-    };
-  });
+async function addExpense(){
+  const labelInp = document.getElementById('fin-exp-label');
+  const amountInp = document.getElementById('fin-exp-amount');
+  const catSel = document.getElementById('fin-exp-cat');
+  const label = labelInp.value.trim();
+  const amount = parseAmount(amountInp.value);
+  const cat = catSel ? catSel.value : 'Autre';
+  if(!label || !amount) return;
+  const mk = monthKey();
+  const data = await sget('finance:'+mk) || {savings:[], expenses:[], income:[]};
+  data.expenses = data.expenses || [];
+  data.expenses.push({id:uid(), label, amount, cat});
+  await sset('finance:'+mk, data);
+  labelInp.value=''; amountInp.value='';
+  renderFinance();
 }
 
 async function saveFinance(){
   const mk = monthKey();
-  const data = await sget('finance:'+mk) || {savings:[], expenses:[]};
-  data.shopping = document.getElementById('fin-shopping').value;
-  data.cadeaux = document.getElementById('fin-cadeaux').value;
-  data.chambre = document.getElementById('fin-chambre').value;
+  const data = await sget('finance:'+mk) || {savings:[], expenses:[], income:[]};
+  data.fixed = document.getElementById('fin-fixed').value;
   await sset('finance:'+mk, data);
-  renderFinance();
-}
-
-async function addExpense(){
-  const labelInp = document.getElementById('fin-exp-label');
-  const amountInp = document.getElementById('fin-exp-amount');
-  const label = labelInp.value.trim();
-  const amount = parseAmount(amountInp.value);
-  if(!label || !amount) return;
-  const mk = monthKey();
-  const data = await sget('finance:'+mk) || {savings:[], expenses:[]};
-  data.expenses = data.expenses || [];
-  data.expenses.push({id:uid(), label, amount});
-  await sset('finance:'+mk, data);
-  labelInp.value=''; amountInp.value='';
   renderFinance();
 }
 
@@ -3012,6 +3140,34 @@ async function submitPin(){
   if(pinBusy) return;
   const code = pinBuffer;
   if(code.length < 4){ pinError('Code trop court'); return; }
+
+  // Mode vérification de l'ancien code (avant changement)
+  if(pinMode === 'verify-old'){
+    setPinBusy(true);
+    setPinPrompt('Ton code actuel', 'Vérification…');
+    try{
+      const r = await fetch(API+'/login', {
+        method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ code })
+      });
+      const data = await r.json().catch(()=>({}));
+      if(r.ok && data.token){
+        saveSession(data.token);
+        pinBuffer = '';
+        pinMode = 'create';
+        renderPinDots();
+        setPinPrompt('Choisis un nouveau code', 'Au moins 4 chiffres');
+      } else if(r.status === 429){
+        setPinPrompt('Accès bloqué', 'Trop de tentatives');
+        pinError(`Réessaie dans ${data.minutes || 15} min`);
+      } else {
+        pinBuffer=''; renderPinDots();
+        setPinPrompt('Ton code actuel', 'Pour sécurité, confirme-le');
+        pinError('Code incorrect');
+      }
+    }catch(e){ pinError('Connexion impossible'); }
+    finally{ setPinBusy(false); }
+    return;
+  }
 
   // Mode création / confirmation d'un nouveau code
   if(pinMode === 'create'){
@@ -3115,9 +3271,12 @@ async function lockApp(mode){
   document.getElementById('app').style.display = 'none';
   document.getElementById('pin-screen').style.display = 'flex';
   document.getElementById('pin-error').textContent = '';
+  buildPinPad();
   renderPinDots();
   if(mode === 'create'){
     setPinPrompt('Choisis un nouveau code', 'Au moins 4 chiffres');
+  } else if(mode === 'verify-old'){
+    setPinPrompt('Ton code actuel', 'Pour sécurité, confirme-le');
   } else {
     setPinPrompt('Mon carnet', 'Entre ton code');
     try{ await fetch(API+'/logout', { method:'POST', headers:authHeaders() }); }catch(e){}
